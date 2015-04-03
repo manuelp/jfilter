@@ -10,7 +10,7 @@ This is a POC: the API should be considered *alpha*, and may be subject to chang
 
 ## Changelog
 
-### 0.0.1-SNAPSHOT
+### 0.0.1
 
 First release with a first formulation of the `Filter` concept and basic mechanics.
 
