@@ -16,10 +16,10 @@ public class Filters {
    * @param values List of values
    * @param <T> Type of values to be filtered
    * @return Filtered list of the original values that
-   *         {@link Filter#match(Object) matches} the given filter
+   *         {@link Filter#matches(Object) matches} the given filter
    */
   public static <T> List<T> filter(Filter<T> filter, List<T> values) {
-    return sequence(values).filter(filter.fn()).toList();
+    return sequence(values).filter(filter).toList();
   }
 
   /**
@@ -29,7 +29,7 @@ public class Filters {
    * @param filters List of {@link Filter filters} to apply
    * @param values List of values
    * @param <T> Type of the values to filter
-   * @return List of values that {@link Filter#match(Object) matches}
+   * @return List of values that {@link Filter#matches(Object) matches}
    *         <em>all</em> the given filters
    */
   public static <T> List<T> filter(List<Filter<T>> filters, List<T> values) {

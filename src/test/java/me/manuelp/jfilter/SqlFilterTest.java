@@ -1,6 +1,5 @@
 package me.manuelp.jfilter;
 
-import me.manuelp.jfilter.data.PotentialFriendFilter;
 import me.manuelp.jfilter.data.Sex;
 import me.manuelp.jfilter.sql.SqlFilter;
 import me.manuelp.jfilter.sql.SqlNameFilter;
@@ -36,15 +35,16 @@ public class SqlFilterTest {
 
   @Test
   public void canGenerateComplexWhereClauses() {
-    SqlFilter f = new SqlPotentialFriendFilter(range(18,45), Sex.FEMALE, "p");
+    SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
     assertEquals("(p.age BETWEEN ? AND ?) AND p.sex=?", f.whereClause());
   }
 
   @Test
-  public void canBindStatementValuesForComplexWhereClauses() throws SQLException {
+  public void canBindStatementValuesForComplexWhereClauses()
+      throws SQLException {
     PreparedStatement statement = mock(PreparedStatement.class);
-    SqlFilter f = new SqlPotentialFriendFilter(range(18,45), Sex.FEMALE, "p");
+    SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
     f.bindParameter(statement, 5);
 

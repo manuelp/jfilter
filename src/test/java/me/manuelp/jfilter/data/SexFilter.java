@@ -6,7 +6,6 @@ public class SexFilter extends Filter<Person> {
   private final Sex sex;
 
   public SexFilter(Sex v) {
-    super("sex");
     this.sex = v;
   }
 
@@ -15,7 +14,7 @@ public class SexFilter extends Filter<Person> {
   }
 
   @Override
-  public boolean match(Person p) {
+  public boolean matches(Person p) {
     return p.getSex() == sex;
   }
 }

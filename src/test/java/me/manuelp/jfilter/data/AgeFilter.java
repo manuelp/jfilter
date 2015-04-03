@@ -10,7 +10,6 @@ public class AgeFilter extends Filter<Person> implements SqlFilter {
   private final int age;
 
   public AgeFilter(int age) {
-    super("age");
     this.age = age;
   }
 
@@ -19,7 +18,7 @@ public class AgeFilter extends Filter<Person> implements SqlFilter {
   }
 
   @Override
-  public boolean match(Person p) {
+  public boolean matches(Person p) {
     return p.getAge() == age;
   }
 

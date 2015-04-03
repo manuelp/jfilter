@@ -11,6 +11,10 @@ This is a POC: the API should be considered *alpha*, and may be subject to chang
 
 ## Changelog
 
+### 0.3.0-SNAPSHOT
+
+* `Filter<T>` is now both a `Predicate<T>` and a `Callable1<T, Boolean>`.
+
 ### 0.2.0
 
 * Added some settings and metadata in the POM file.

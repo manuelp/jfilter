@@ -7,13 +7,12 @@ public class PotentialFriendFilter extends Filter<Person> {
   private final Sex sex;
 
   public PotentialFriendFilter(Range ageRange, Sex sex) {
-    super("potentialFriend");
     this.ageRange = ageRange;
     this.sex = sex;
   }
 
   @Override
-  public boolean match(Person p) {
+  public boolean matches(Person p) {
     return ageRange.contains(p.getAge()) && p.getSex() == sex;
   }
 }
