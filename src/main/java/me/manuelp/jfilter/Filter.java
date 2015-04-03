@@ -1,6 +1,7 @@
 package me.manuelp.jfilter;
 
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Predicate;
 import me.manuelp.jfilter.validations.NotNull;
 
 /**
@@ -37,12 +38,11 @@ public abstract class Filter<V, T> {
     if (o == null || getClass() != o.getClass())
       return false;
 
+    @SuppressWarnings("unchecked")
     Filter<V, T> filter = (Filter<V, T>) o;
 
-    if (!getCode().equals(filter.getCode()))
-      return false;
-    return getValue().equals(filter.getValue());
-
+    return getCode().equals(filter.getCode())
+        && getValue().equals(filter.getValue());
   }
 
   @Override
@@ -54,27 +54,23 @@ public abstract class Filter<V, T> {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("Filter{");
-    sb.append("code='").append(code).append('\'');
-    sb.append(", value=").append(value);
-    sb.append('}');
-    return sb.toString();
+    return "Filter{" + "code='" + code + '\'' + ", value=" + value + '}';
   }
 
   /**
-   * Generates a function to match a {@code T} value to the filter instance preconfigured
-   * with a matching value.
+   * Generates a predicate to match a {@code T} value to the filter instance
+   * preconfigured with a matching value.
    * <p>
-   * The actual logic is implementented by the {@link #match(Object)} method and applied
-   * to a specific {@code V} value retained by closure.
+   * The actual logic is implementented by the {@link #match(Object)} method and
+   * applied to a specific {@code V} value retained by closure.
    * </p>
    *
-   * @return Function <code>V -> T -> Boolean</code> partially applied to a particular
-   * <code>V</code> value
+   * @return Function <code>V -> T -> Boolean</code> partially applied to a
+   *         particular <code>V</code> value
    */
-  public Function1<T, Boolean> fn() {
-    return new Function1<T, Boolean>() {
-      public Boolean call(T t) throws Exception {
+  public Predicate<T> fn() {
+    return new Predicate<T>() {
+      public boolean matches(T t) {
         return match(t);
       }
     };
