@@ -15,4 +15,12 @@ public class Range {
   public boolean contains(int n) {
     return from <= n && n <= to;
   }
+
+  public int getFrom() {
+    return from;
+  }
+
+  public int getTo() {
+    return to;
+  }
 }
