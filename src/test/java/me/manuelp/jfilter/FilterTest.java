@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Predicate;
 import org.junit.Test;
 
 import static me.manuelp.jfilter.AgeFilter.ageFilter;
+import static me.manuelp.jfilter.Range.range;
 import static me.manuelp.jfilter.SexFilter.sexFilter;
 import static org.junit.Assert.*;
 
@@ -29,8 +30,8 @@ public class FilterTest {
   public void thereCanBeComplexFilters() {
     Person p = new Person("Name", "Surname", 18, Sex.FEMALE);
 
-    assertTrue(new PotentialFriendFilter(18, 35, Sex.FEMALE).match(p));
-    assertFalse(new PotentialFriendFilter(20, 35, Sex.FEMALE).match(p));
+    assertTrue(new PotentialFriendFilter(range(18, 35), Sex.FEMALE).match(p));
+    assertFalse(new PotentialFriendFilter(range(20, 35), Sex.FEMALE).match(p));
   }
 
 }

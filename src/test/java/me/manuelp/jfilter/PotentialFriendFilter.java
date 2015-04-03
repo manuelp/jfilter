@@ -1,19 +1,17 @@
 package me.manuelp.jfilter;
 
 public class PotentialFriendFilter extends Filter<Person> {
-  private final int fromAge;
-  private final int toAge;
+  private Range ageRange;
   private final Sex sex;
 
-  public PotentialFriendFilter(int fromAge, int toAge, Sex sex) {
+  public PotentialFriendFilter(Range ageRange, Sex sex) {
     super("potentialFriend");
-    this.fromAge = fromAge;
-    this.toAge = toAge;
+    this.ageRange = ageRange;
     this.sex = sex;
   }
 
   @Override
   public boolean match(Person p) {
-    return p.getAge() >= fromAge && p.getAge() <= toAge && p.getSex() == sex;
+    return ageRange.contains(p.getAge()) && p.getSex() == sex;
   }
 }
