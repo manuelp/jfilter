@@ -25,10 +25,12 @@ public class FilterTest {
     assertTrue(f.matches(p));
   }
 
-//  @Test
-//  public void thereCanBeComplexFilters() {
-//    Person p = new Person("Name", "Surname", 18, Sex.FEMALE);
-//    assertTrue(new PotentialFriendFilter(18, 35, Sex.FEMALE))
-//  }
+  @Test
+  public void thereCanBeComplexFilters() {
+    Person p = new Person("Name", "Surname", 18, Sex.FEMALE);
+
+    assertTrue(new PotentialFriendFilter(18, 35, Sex.FEMALE).match(p));
+    assertFalse(new PotentialFriendFilter(20, 35, Sex.FEMALE).match(p));
+  }
 
 }
