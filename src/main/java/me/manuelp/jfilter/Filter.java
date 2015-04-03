@@ -1,7 +1,6 @@
 package me.manuelp.jfilter;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Predicate;
+import fj.F;
 
 /**
  * Models a function <code>a -> t -> Bool</code> where <code>a</code> is the
@@ -14,9 +13,5 @@ import com.googlecode.totallylazy.Predicate;
  *
  * @param <T> Type of the values to which this filter can be applied
  */
-public abstract class Filter<T> implements Predicate<T>, Callable1<T, Boolean> {
-  @Override
-  public Boolean call(T t) throws Exception {
-    return matches(t);
-  }
+public interface Filter<T> extends F<T, Boolean> {
 }

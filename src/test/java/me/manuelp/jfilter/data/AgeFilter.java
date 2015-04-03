@@ -6,7 +6,7 @@ import me.manuelp.jfilter.sql.SqlFilter;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class AgeFilter extends Filter<Person> implements SqlFilter {
+public class AgeFilter implements Filter<Person>, SqlFilter {
   private final int age;
 
   public AgeFilter(int age) {
@@ -18,7 +18,7 @@ public class AgeFilter extends Filter<Person> implements SqlFilter {
   }
 
   @Override
-  public boolean matches(Person p) {
+  public Boolean f(Person p) {
     return p.getAge() == age;
   }
 

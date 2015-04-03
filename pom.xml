@@ -6,7 +6,7 @@
 
     <groupId>me.manuelp</groupId>
     <artifactId>jfilter</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0-SNAPSHOT</version>
 
     <issueManagement>
         <url>https://github.com/manuelp/jfilter/issues</url>
@@ -50,18 +50,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.totallylazy</groupId>
-            <artifactId>totallylazy</artifactId>
-            <version>1.67</version>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava</artifactId>
+            <version>4.2</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>repo.bodar.com</id>
-            <url>http://repo.bodar.com</url>
-        </repository>
-    </repositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

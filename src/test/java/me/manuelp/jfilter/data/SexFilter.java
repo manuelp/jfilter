@@ -2,7 +2,7 @@ package me.manuelp.jfilter.data;
 
 import me.manuelp.jfilter.Filter;
 
-public class SexFilter extends Filter<Person> {
+public class SexFilter implements Filter<Person> {
   private final Sex sex;
 
   public SexFilter(Sex v) {
@@ -14,7 +14,7 @@ public class SexFilter extends Filter<Person> {
   }
 
   @Override
-  public boolean matches(Person p) {
+  public Boolean f(Person p) {
     return p.getSex() == sex;
   }
 }

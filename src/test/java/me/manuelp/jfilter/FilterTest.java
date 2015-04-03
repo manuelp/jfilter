@@ -16,17 +16,17 @@ public class FilterTest {
   public void simpleFilters() {
     Person p = new Person("Name", "Surname", 18, Sex.FEMALE);
 
-    assertTrue(ageFilter(18).matches(p));
-    assertTrue(sexFilter(Sex.FEMALE).matches(p));
-    assertFalse(sexFilter(Sex.MALE).matches(p));
+    assertTrue(ageFilter(18).f(p));
+    assertTrue(sexFilter(Sex.FEMALE).f(p));
+    assertFalse(sexFilter(Sex.MALE).f(p));
   }
 
   @Test
   public void thereCanBeComplexFilters() {
     Person p = new Person("Name", "Surname", 18, Sex.FEMALE);
 
-    assertTrue(new PotentialFriendFilter(range(18, 35), Sex.FEMALE).matches(p));
-    assertFalse(new PotentialFriendFilter(range(20, 35), Sex.FEMALE).matches(p));
+    assertTrue(new PotentialFriendFilter(range(18, 35), Sex.FEMALE).f(p));
+    assertFalse(new PotentialFriendFilter(range(20, 35), Sex.FEMALE).f(p));
   }
 
 }
