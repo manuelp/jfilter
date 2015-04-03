@@ -43,7 +43,8 @@ public class FilteringTest {
     Person p2 = new Person("_", "_", 17, Sex.MALE);
     Person p3 = new Person("_", "_", 21, Sex.MALE);
 
-    Filter<Person> comp = Filters.compose(ageFilter(17), sexFilter(Sex.FEMALE));
+    Filter<Person> comp = Filters.compose(Arrays.asList(ageFilter(17),
+      sexFilter(Sex.FEMALE)));
     List<Person> results = Filters.filter(comp, Arrays.asList(p1, p2, p3));
 
     assertEquals(1, results.size());
