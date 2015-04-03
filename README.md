@@ -9,11 +9,15 @@ used to filter POJOs/value objects, or to manage JDBC filters (WHERE clauses and
 
 This is a POC: the API should be considered *alpha*, and may be subject to change.
 
+Right now, we have a small number of primitives and functions that rely on [TotallyLazy](http://totallylazy.com/) for
+the most generic ones (callables, predicates, etc).
+
 ## Changelog
 
 ### 0.3.0-SNAPSHOT
 
 * `Filter<T>` is now both a `Predicate<T>` and a `Callable1<T, Boolean>`.
+* Implemented an AND composition of `Filter<T>` in `Filters.compose(Filter<T>... filters)`.
 
 ### 0.2.0
 
@@ -37,19 +41,20 @@ filter :: a -> Bool
 This concept can be abstracted further by defining a matching function:
 
 ```haskell
-match :: a -> b -> Bool
+matches :: a -> b -> Bool
 ```
 
 Where `a` is the *value of a filter* and `b` is *the type of the values to match against that filter value*.
 
 In a Java context, we can model a filter as a partially applied function:
 
-* Every filter is a statically typed class of objects that implements that `match` function.
-* The `a` type is fixed by creating a specific `Filter` derived class, and the partial application of the `match` 
+* Every filter is a statically typed class of objects that implements that `matches` function.
+* The `a` type is fixed by creating a specific `Filter` derived class, and the partial application of the `matches` 
   function is done by passing an `a` value to the constructor.
-* The resulting function `b -> Bool` can be applied to a `b` value directly by calling the `#match()` method of
-  a `Filter` derived class instance, or by the `Predicate<B>` function obtained via the `#fn()` method of said 
-  instance.
+* The resulting function `b -> Bool` can be applied to a `b` value directly by calling the `Predicate#matches()` method of
+  a `Filter` derived class instance.
+  
+Actually, using TotallyLazy a `Filter<T>` is a `Predicate<T>` and a `Callable1<T, Boolean>`.
   
 This way, we can write generic and type-safe filtering operations by *composing filters*.
 
@@ -76,7 +81,7 @@ Some examples can be seen in the tests, but the gist is as follows.
 
 ### Value objects
 
-* Define a POJO/value object:
+Define a POJO/value object:
 
 ```java
 public class Person {
@@ -89,14 +94,13 @@ public class Person {
 }
 ```
 
-* Define some *filters* for this type, by extending the `Filter` base class:
+Define some *filters* for this type, by extending the `Filter` base class:
 
 ```java
 public class AgeFilter extends Filter<Person> {
   private final int age;
 
   public AgeFilter(int age) {
-    super("age");
     this.age = age;
   }
 
@@ -105,20 +109,31 @@ public class AgeFilter extends Filter<Person> {
   }
 
   @Override
-  public boolean match(Person p) {
+  public boolean matches(Person p) {
     return p.getAge() == age;
   }
 }
 ```
 
-* Use all the filters defined this way to filter `Person` values by using the `Filters` utility class:
+Use all the filters defined this way to filter `Person` values by using the `Filters` utility class. We can apply a 
+single filter to a list of compatible values:
 
 ```java
 List<Person> results = Filters.filter(AgeFilter.ageFilter(21), Arrays.asList(p1, p2));
-// Or applying multiple filters at once:
+```
+
+We can also apply a *list of filters* to a list of compatible values:
+
+```java
 List<Person> results = Filters.filter(
   Arrays.asList(ageFilter(25), sexFilter(Sex.FEMALE)),
   Arrays.asList(p1, p2, p3));
+```
+
+We can even *chain filters together in AND*:
+
+```java
+Filter<Person> compFilter = Filters.compose(ageFilter(25), sexFilter(Sex.FEMALE));
 ```
 
 ### JDBC filtering
