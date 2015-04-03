@@ -1,29 +1,21 @@
 package me.manuelp.jfilter;
 
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import me.manuelp.jfilter.validations.NotNull;
 
 /**
- * @param <V> Type of the filter value
  * @param <T> Type of the values to which this filter can be applied
  */
-public abstract class Filter<V, T> {
+public abstract class Filter<T> {
   private final String code;
-  private final V value;
 
-  protected Filter(String code, V value) {
-    NotNull.check(code, value);
+  protected Filter(String code) {
+    NotNull.check(code);
     this.code = code;
-    this.value = value;
   }
 
   public String getCode() {
     return code;
-  }
-
-  public V getValue() {
-    return value;
   }
 
   /**
@@ -38,23 +30,20 @@ public abstract class Filter<V, T> {
     if (o == null || getClass() != o.getClass())
       return false;
 
-    @SuppressWarnings("unchecked")
-    Filter<V, T> filter = (Filter<V, T>) o;
+    Filter<?> filter = (Filter<?>) o;
 
-    return getCode().equals(filter.getCode())
-        && getValue().equals(filter.getValue());
+    return getCode().equals(filter.getCode());
+
   }
 
   @Override
   public int hashCode() {
-    int result = getCode().hashCode();
-    result = 31 * result + getValue().hashCode();
-    return result;
+    return getCode().hashCode();
   }
 
   @Override
   public String toString() {
-    return "Filter{" + "code='" + code + '\'' + ", value=" + value + '}';
+    return "Filter{" + "code='" + code + '\'' + '}';
   }
 
   /**

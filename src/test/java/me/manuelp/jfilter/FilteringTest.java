@@ -1,6 +1,5 @@
 package me.manuelp.jfilter;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -29,7 +28,7 @@ public class FilteringTest {
     Person p3 = new Person("_", "_", 21, Sex.MALE);
 
     List<Person> results = Filters.filter(
-      Arrays.<Filter<?, Person>> asList(ageFilter(17), sexFilter(Sex.MALE)),
+      Arrays.asList(ageFilter(17), sexFilter(Sex.MALE)),
       Arrays.asList(p1, p2, p3));
 
     assertEquals(1, results.size());

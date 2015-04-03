@@ -1,8 +1,11 @@
 package me.manuelp.jfilter;
 
-public class SexFilter extends Filter<Sex, Person> {
+public class SexFilter extends Filter<Person> {
+  private final Sex sex;
+
   public SexFilter(Sex v) {
-    super("sex", v);
+    super("sex");
+    this.sex = v;
   }
 
   public static SexFilter sexFilter(Sex value) {
@@ -11,6 +14,6 @@ public class SexFilter extends Filter<Sex, Person> {
 
   @Override
   public boolean match(Person p) {
-    return p.getSex() == getValue();
+    return p.getSex() == sex;
   }
 }
