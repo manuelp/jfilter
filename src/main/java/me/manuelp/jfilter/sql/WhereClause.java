@@ -1,5 +1,6 @@
 package me.manuelp.jfilter.sql;
 
+import fj.F;
 import me.manuelp.jfilter.validations.NotNull;
 
 public class WhereClause {
@@ -16,6 +17,15 @@ public class WhereClause {
 
   public String getClause() {
     return clause;
+  }
+
+  public static F<SqlFilter, WhereClause> getClauseF() {
+    return new F<SqlFilter, WhereClause>() {
+      @Override
+      public WhereClause f(SqlFilter sqlFilter) {
+        return sqlFilter.whereClause();
+      }
+    };
   }
 
   @Override
