@@ -11,7 +11,7 @@ This is a POC: the API should be considered *alpha*, and may be subject to chang
 
 ## Changelog
 
-### 0.2.0-SNAPSHOT
+### 0.2.0
 
 * Added some settings and metadata in the POM file.
 * Implemented JDBC-level filtering (WHERE clause generation and values binding).
