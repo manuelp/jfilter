@@ -6,7 +6,35 @@
 
     <groupId>me.manuelp</groupId>
     <artifactId>jfilter</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
+
+    <issueManagement>
+        <url>https://github.com/manuelp/jfilter/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/manuelp/jfilter</url>
+        <connection>https://github.com/manuelp/jfilter.git</connection>
+        <developerConnection>scm:git:git@github.com:manuelp/jfilter.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <email>manuel.paccagnella@gmail.com</email>
+            <name>Manuel Paccagnella</name>
+            <url>https://github.com/manuelp</url>
+            <id>manuelp</id>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -28,4 +56,43 @@
             <url>http://repo.bodar.com</url>
         </repository>
     </repositories>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
