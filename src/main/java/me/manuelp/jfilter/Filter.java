@@ -4,6 +4,14 @@ import com.googlecode.totallylazy.Predicate;
 import me.manuelp.jfilter.validations.NotNull;
 
 /**
+ * Models a function <code>a -> b -> Bool</code> where <code>a</code> is the
+ * type of a specific filter values and <code>b</code> is the type of values
+ * that can be filtered by this specific filter type.
+ * <p>
+ * The <code>a</code> type is implicitly fixed by the extensions of this base
+ * class, and the value can be specified via its constructor.
+ * </p>
+ *
  * @param <T> Type of the values to which this filter can be applied
  */
 public abstract class Filter<T> {
@@ -19,7 +27,9 @@ public abstract class Filter<T> {
   }
 
   /**
-   * Approximation of a function <code>V -> T -> Bool</code>.
+   * Approximation of a function <code>A -> T -> Bool</code>, where
+   * <code>A</code> is fixed by derived classes and the values can be accessed
+   * via <code>this</code>.
    */
   public abstract boolean match(T data);
 
