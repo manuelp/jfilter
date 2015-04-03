@@ -11,6 +11,6 @@ public class SexFilter extends Filter<Sex, Person> {
 
   @Override
   public boolean match(Person p) {
-    return p.getSex().equals(getValue());
+    return p.getSex() == getValue();
   }
 }

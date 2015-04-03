@@ -7,7 +7,7 @@ import static me.manuelp.jfilter.AgeFilter.ageFilter;
 import static me.manuelp.jfilter.SexFilter.sexFilter;
 import static org.junit.Assert.*;
 
-public class FilterableTest {
+public class FilterTest {
   @Test
   public void simpleFilters() {
     Person p = new Person("Name", "Surname", 18, Sex.FEMALE);

@@ -10,7 +10,7 @@ import static me.manuelp.jfilter.AgeFilter.ageFilter;
 import static me.manuelp.jfilter.SexFilter.sexFilter;
 import static org.junit.Assert.assertEquals;
 
-public class FiltersTest {
+public class FilteringTest {
   @Test
   public void canApplyAFilterToAListOfValues() {
     Person p1 = new Person("_", "_", 17, Sex.FEMALE);
@@ -22,7 +22,6 @@ public class FiltersTest {
     assertEquals(p2, results.get(0));
   }
 
-  @Ignore
   @Test
   public void canApplyMultipleFiltersToAListOfValues() {
     Person p1 = new Person("_", "_", 17, Sex.FEMALE);

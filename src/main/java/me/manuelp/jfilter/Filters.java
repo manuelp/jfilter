@@ -1,6 +1,5 @@
 package me.manuelp.jfilter;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -11,6 +10,9 @@ public class Filters {
   }
 
   public static <T> List<T> filter(List<Filter<?, T>> filters, List<T> values) {
-    return Collections.emptyList();
+    List<T> results = sequence(values).toList();
+    for (Filter<?, T> f : filters)
+      results = filter(f, results);
+    return results;
   }
 }
