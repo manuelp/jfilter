@@ -20,16 +20,22 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return String.format("(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef,
-      tableRef);
+  public WhereClause whereClause() {
+    return WhereClause.whereClause(String.format(
+      "(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setInt(index, range.getFrom());
-    statement.setInt(index + 1, range.getTo());
-    statement.setString(index + 2, sex.name());
+  public BindParamsF bindParameter(final int index) {
+    return new BindParamsF() {
+      @Override
+      public PreparedStatement f(PreparedStatement statement)
+          throws SQLException {
+        statement.setInt(index, range.getFrom());
+        statement.setInt(index + 1, range.getTo());
+        statement.setString(index + 2, sex.name());
+        return statement;
+      }
+    };
   }
 }

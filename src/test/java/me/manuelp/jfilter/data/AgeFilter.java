@@ -1,7 +1,9 @@
 package me.manuelp.jfilter.data;
 
 import me.manuelp.jfilter.Filter;
+import me.manuelp.jfilter.sql.BindParamsF;
 import me.manuelp.jfilter.sql.SqlFilter;
+import me.manuelp.jfilter.sql.WhereClause;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,13 +25,19 @@ public class AgeFilter implements Filter<Person>, SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return "t.age=?";
+  public WhereClause whereClause() {
+    return WhereClause.whereClause("t.age=?");
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setInt(index, age);
+  public BindParamsF bindParameter(final int index) {
+    return new BindParamsF() {
+      @Override
+      public PreparedStatement f(PreparedStatement statement)
+          throws SQLException {
+        statement.setInt(index, age);
+        return statement;
+      }
+    };
   }
 }

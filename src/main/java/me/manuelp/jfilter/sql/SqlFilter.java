@@ -1,7 +1,6 @@
 package me.manuelp.jfilter.sql;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * An SQL filter encapsulates the WHERE clause construction and parameter
@@ -25,16 +24,17 @@ public interface SqlFilter {
    * 
    * @return WHERE clause
    */
-  String whereClause();
+  WhereClause whereClause();
 
   /**
-   * Bind the parameter in a statement (or not, if the corresponding
+   * 
+   * Returns a {@link BindParamsF binding function} that binds parameters in a
+   * {@link PreparedStatement} (or not, if the corresponding
    * {@link #whereClause()} is not parametric.
    *
-   * @param statement Statement to configure
    * @param index Index of the parameter to fill in
-   * @throws SQLException
+   * @return {@link BindParamsF Function} to bind parameters values in a
+   *         {@link PreparedStatement}
    */
-  void bindParameter(PreparedStatement statement, int index)
-      throws SQLException;
+  BindParamsF bindParameter(int index);
 }

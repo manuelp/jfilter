@@ -13,13 +13,19 @@ public class SqlNameFilter implements SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return tableRef + "." + name + "=?";
+  public WhereClause whereClause() {
+    return WhereClause.whereClause(tableRef + "." + name + "=?");
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setString(index, name);
+  public BindParamsF bindParameter(final int index) {
+    return new BindParamsF() {
+      @Override
+      public PreparedStatement f(PreparedStatement statement)
+          throws SQLException {
+        statement.setString(index, name);
+        return statement;
+      }
+    };
   }
 }

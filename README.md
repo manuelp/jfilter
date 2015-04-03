@@ -16,7 +16,7 @@ the most generic ones (callables, predicates, etc).
 
 ### 0.4.0-SNAPSHOT
 
-* Switched to functional-java.
+* Switched to [Functional Java](http://www.functionaljava.org/).
 * `Filter<T>` is now a simple `F<T, Boolean>`.
 * `Filters#compose()` has been renamed to `Filters#and()`.
 

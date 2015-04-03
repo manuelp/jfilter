@@ -20,7 +20,7 @@ public class SqlFilterTest {
   public void canGenerateWhereClause() {
     SqlFilter f = ageFilter(12);
 
-    assertEquals("t.age=?", f.whereClause());
+    assertEquals("t.age=?", f.whereClause().getClause());
   }
 
   @Test
@@ -28,7 +28,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlNameFilter("t", "Larry");
 
-    f.bindParameter(statement, 1);
+    f.bindParameter(1).f(statement);
 
     verify(statement).setString(1, "Larry");
   }
@@ -37,7 +37,8 @@ public class SqlFilterTest {
   public void canGenerateComplexWhereClauses() {
     SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
-    assertEquals("(p.age BETWEEN ? AND ?) AND p.sex=?", f.whereClause());
+    assertEquals("(p.age BETWEEN ? AND ?) AND p.sex=?", f.whereClause()
+        .getClause());
   }
 
   @Test
@@ -46,7 +47,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
-    f.bindParameter(statement, 5);
+    f.bindParameter(5).f(statement);
 
     verify(statement).setInt(5, 18);
     verify(statement).setInt(6, 45);
