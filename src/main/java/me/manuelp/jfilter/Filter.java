@@ -1,5 +1,6 @@
 package me.manuelp.jfilter;
 
+import com.googlecode.totallylazy.Function1;
 import me.manuelp.jfilter.validations.NotNull;
 
 /**
@@ -58,5 +59,24 @@ public abstract class Filter<V, T> {
     sb.append(", value=").append(value);
     sb.append('}');
     return sb.toString();
+  }
+
+  /**
+   * Generates a function to match a {@code T} value to the filter instance preconfigured
+   * with a matching value.
+   * <p>
+   * The actual logic is implementented by the {@link #match(Object)} method and applied
+   * to a specific {@code V} value retained by closure.
+   * </p>
+   *
+   * @return Function <code>V -> T -> Boolean</code> partially applied to a particular
+   * <code>V</code> value
+   */
+  public Function1<T, Boolean> fn() {
+    return new Function1<T, Boolean>() {
+      public Boolean call(T t) throws Exception {
+        return match(t);
+      }
+    };
   }
 }
