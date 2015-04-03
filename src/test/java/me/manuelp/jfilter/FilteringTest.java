@@ -1,12 +1,14 @@
 package me.manuelp.jfilter;
 
+import me.manuelp.jfilter.data.Person;
+import me.manuelp.jfilter.data.Sex;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static me.manuelp.jfilter.AgeFilter.ageFilter;
-import static me.manuelp.jfilter.SexFilter.sexFilter;
+import static me.manuelp.jfilter.data.AgeFilter.ageFilter;
+import static me.manuelp.jfilter.data.SexFilter.sexFilter;
 import static org.junit.Assert.assertEquals;
 
 public class FilteringTest {

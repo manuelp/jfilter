@@ -1,4 +1,6 @@
-package me.manuelp.jfilter;
+package me.manuelp.jfilter.data;
+
+import me.manuelp.jfilter.Filter;
 
 public class AgeFilter extends Filter<Person> {
   private final int age;

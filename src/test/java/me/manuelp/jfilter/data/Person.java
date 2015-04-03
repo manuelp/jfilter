@@ -1,4 +1,4 @@
-package me.manuelp.jfilter;
+package me.manuelp.jfilter.data;
 
 import me.manuelp.jfilter.validations.NotNull;
 
@@ -45,10 +45,8 @@ public class Person {
       return false;
     if (!getName().equals(person.getName()))
       return false;
-    if (!getSurname().equals(person.getSurname()))
-      return false;
-    return getSex() == person.getSex();
-
+    return getSurname().equals(person.getSurname())
+        && getSex() == person.getSex();
   }
 
   @Override
@@ -62,12 +60,7 @@ public class Person {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("Person{");
-    sb.append("name='").append(name).append('\'');
-    sb.append(", surname='").append(surname).append('\'');
-    sb.append(", age=").append(age);
-    sb.append(", sex=").append(sex);
-    sb.append('}');
-    return sb.toString();
+    return "Person{" + "name='" + name + '\'' + ", surname='" + surname + '\''
+        + ", age=" + age + ", sex=" + sex + '}';
   }
 }

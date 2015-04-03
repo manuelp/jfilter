@@ -1,4 +1,4 @@
-package me.manuelp.jfilter;
+package me.manuelp.jfilter.data;
 
 public class Range {
   private final int from, to;

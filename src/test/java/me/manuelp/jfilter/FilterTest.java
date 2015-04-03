@@ -1,11 +1,14 @@
 package me.manuelp.jfilter;
 
 import com.googlecode.totallylazy.Predicate;
+import me.manuelp.jfilter.data.Person;
+import me.manuelp.jfilter.data.PotentialFriendFilter;
+import me.manuelp.jfilter.data.Sex;
 import org.junit.Test;
 
-import static me.manuelp.jfilter.AgeFilter.ageFilter;
-import static me.manuelp.jfilter.Range.range;
-import static me.manuelp.jfilter.SexFilter.sexFilter;
+import static me.manuelp.jfilter.data.AgeFilter.ageFilter;
+import static me.manuelp.jfilter.data.Range.range;
+import static me.manuelp.jfilter.data.SexFilter.sexFilter;
 import static org.junit.Assert.*;
 
 public class FilterTest {

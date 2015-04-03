@@ -1,4 +1,6 @@
-package me.manuelp.jfilter;
+package me.manuelp.jfilter.data;
+
+import me.manuelp.jfilter.Filter;
 
 public class PotentialFriendFilter extends Filter<Person> {
   private Range ageRange;
