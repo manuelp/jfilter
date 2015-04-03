@@ -14,7 +14,7 @@ the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
-### 0.3.0-SNAPSHOT
+### 0.3.0
 
 * `Filter<T>` is now both a `Predicate<T>` and a `Callable1<T, Boolean>`.
 * Implemented an AND composition of `Filter<T>` in `Filters.compose(Filter<T>... filters)`.
