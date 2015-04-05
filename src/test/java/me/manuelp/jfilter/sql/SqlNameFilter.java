@@ -1,5 +1,7 @@
 package me.manuelp.jfilter.sql;
 
+import fj.P2;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -18,13 +20,13 @@ public class SqlNameFilter implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter(final ParamIndex index) {
+  public BindParamsF bindParameter() {
     return new BindParamsF() {
       @Override
-      public PreparedStatement f(PreparedStatement statement)
-          throws SQLException {
-        statement.setString(index.get(), name);
-        return statement;
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
+        p._2().setString(p._1().get(), name);
+        return p.map1(ParamIndex.succF());
       }
     };
   }

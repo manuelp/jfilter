@@ -1,5 +1,6 @@
 package me.manuelp.jfilter.sql;
 
+import fj.P2;
 import me.manuelp.jfilter.data.Range;
 import me.manuelp.jfilter.data.Sex;
 import me.manuelp.jfilter.validations.NotNull;
@@ -26,16 +27,17 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter(final ParamIndex index) {
+  public BindParamsF bindParameter() {
     return new BindParamsF() {
       @Override
-      public PreparedStatement f(PreparedStatement statement)
+      public P2<ParamIndex, PreparedStatement> f(P2<ParamIndex, PreparedStatement> p)
           throws SQLException {
-        statement.setInt(index.get(), range.getFrom());
-        statement.setInt(index.get() + 1, range.getTo());
-        statement.setString(index.get() + 2, sex.name());
-        return statement;
+        p._2().setInt(p._1().get(), range.getFrom());
+        p._2().setInt(p._1().get() + 1, range.getTo());
+        p._2().setString(p._1().get() + 2, sex.name());
+        return p.map1(ParamIndex.addF(3));
       }
     };
   }
+
 }

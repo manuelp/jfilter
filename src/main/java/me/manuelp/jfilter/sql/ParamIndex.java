@@ -1,5 +1,6 @@
 package me.manuelp.jfilter.sql;
 
+import fj.F;
 import me.manuelp.jfilter.validations.NotNull;
 
 public class ParamIndex {
@@ -12,6 +13,27 @@ public class ParamIndex {
 
   public static ParamIndex paramIndex(int index) {
     return new ParamIndex(index);
+  }
+
+  public ParamIndex add(int num) {
+    return new ParamIndex(get() + num);
+  }
+
+  public ParamIndex succ() {
+    return add(1);
+  }
+
+  public static F<ParamIndex, ParamIndex> addF(final int num) {
+    return new F<ParamIndex, ParamIndex>() {
+      @Override
+      public ParamIndex f(ParamIndex paramIndex) {
+        return paramIndex.add(num);
+      }
+    };
+  }
+
+  public static F<ParamIndex, ParamIndex> succF() {
+    return addF(1);
   }
 
   public Integer get() {

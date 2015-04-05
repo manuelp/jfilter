@@ -1,5 +1,6 @@
 package me.manuelp.jfilter.data;
 
+import fj.P2;
 import me.manuelp.jfilter.Filter;
 import me.manuelp.jfilter.sql.BindParamsF;
 import me.manuelp.jfilter.sql.ParamIndex;
@@ -31,14 +32,15 @@ public class AgeFilter implements Filter<Person>, SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter(final ParamIndex index) {
+  public BindParamsF bindParameter() {
     return new BindParamsF() {
       @Override
-      public PreparedStatement f(PreparedStatement statement)
-          throws SQLException {
-        statement.setInt(index.get(), age);
-        return statement;
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
+        p._2().setInt(p._1().get(), age);
+        return p.map1(ParamIndex.succF());
       }
     };
   }
+
 }

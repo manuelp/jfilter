@@ -32,9 +32,8 @@ public interface SqlFilter {
    * {@link PreparedStatement} (or not, if the corresponding
    * {@link #whereClause()} is not parametric.
    *
-   * @param index Index of the parameter to fill in
    * @return {@link BindParamsF Function} to bind parameters values in a
    *         {@link PreparedStatement}
    */
-  BindParamsF bindParameter(ParamIndex index);
+  BindParamsF bindParameter();
 }

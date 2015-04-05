@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import static fj.P.p;
 import static me.manuelp.jfilter.data.AgeFilter.ageFilter;
 import static me.manuelp.jfilter.data.Range.range;
 import static me.manuelp.jfilter.sql.ParamIndex.paramIndex;
@@ -29,7 +30,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlNameFilter("t", "Larry");
 
-    f.bindParameter(paramIndex(1)).f(statement);
+    f.bindParameter().f(p(paramIndex(1), statement));
 
     verify(statement).setString(1, "Larry");
   }
@@ -48,7 +49,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
-    f.bindParameter(paramIndex(5)).f(statement);
+    f.bindParameter().f(p(paramIndex(5), statement));
 
     verify(statement).setInt(5, 18);
     verify(statement).setInt(5 + 1, 45);
