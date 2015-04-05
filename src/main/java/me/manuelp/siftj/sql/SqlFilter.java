@@ -1,4 +1,4 @@
-package me.manuelp.jfilter.sql;
+package me.manuelp.siftj.sql;
 
 import java.sql.PreparedStatement;
 
@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
  * <p>
  * Every SQL filter is an implementation of this interface that encapsulates the
  * actual filter value, using the same technique of
- * {@link me.manuelp.jfilter.Filter}.
+ * {@link me.manuelp.siftj.Filter}.
  * </p>
  */
 public interface SqlFilter {

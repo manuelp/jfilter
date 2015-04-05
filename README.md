@@ -1,4 +1,4 @@
-# jfilter
+# siftj
 
 Functional filtering library for POJOs and SQL queries.
 
@@ -74,7 +74,7 @@ A filter in a JDBC context can be viewed as a couple of related operations:
 * WHERE clause string generation
 * Parameters binding
 
-*jfilter* defined an interface that specifies this contract: `SqlFilter`. Being an interface, there are 
+*siftj* defined an interface that specifies this contract: `SqlFilter`. Being an interface, there are 
 a couple of considerations to make:
 
 1. Every object can be a `SqlFilter`, even a `Filter` implementation. In the last case, both POJOs and JDBC filtering 
@@ -234,7 +234,7 @@ public class SqlPotentialFriendFilter implements SqlFilter {
 
 The public API exposed by this library (and significant for the versioning policy) is:
 
-* `me.manuelp.jfilter.Filter` as the base class of every filter.
-* `me.manuelp.jfilter.Filters` with its generic filtering functions.
-* `me.manuelp.jfilter.SqlFilters` with its generic `SqlFilter` composing functions.
-* `me.manuelp.jfilter.sql.SqlFilter` as the contract of a SQL filter.
+* `me.manuelp.siftj.Filter` as the base class of every filter.
+* `me.manuelp.siftj.Filters` with its generic filtering functions.
+* `me.manuelp.siftj.SqlFilters` with its generic `SqlFilter` composing functions.
+* `me.manuelp.siftj.sql.SqlFilter` as the contract of a SQL filter.

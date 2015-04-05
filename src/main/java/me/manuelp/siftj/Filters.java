@@ -1,4 +1,4 @@
-package me.manuelp.jfilter;
+package me.manuelp.siftj;
 
 import com.googlecode.totallylazy.Predicates;
 

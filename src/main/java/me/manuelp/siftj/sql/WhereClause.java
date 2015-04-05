@@ -1,8 +1,8 @@
-package me.manuelp.jfilter.sql;
+package me.manuelp.siftj.sql;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
-import me.manuelp.jfilter.validations.NotNull;
+import me.manuelp.siftj.validations.NotNull;
 
 public class WhereClause {
   private final String clause;

@@ -1,13 +1,13 @@
-package me.manuelp.jfilter;
+package me.manuelp.siftj;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.callables.JoinString;
-import me.manuelp.jfilter.sql.BindParamsF;
-import me.manuelp.jfilter.sql.ParamIndex;
-import me.manuelp.jfilter.sql.SqlFilter;
-import me.manuelp.jfilter.sql.WhereClause;
+import me.manuelp.siftj.sql.BindParamsF;
+import me.manuelp.siftj.sql.ParamIndex;
+import me.manuelp.siftj.sql.SqlFilter;
+import me.manuelp.siftj.sql.WhereClause;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

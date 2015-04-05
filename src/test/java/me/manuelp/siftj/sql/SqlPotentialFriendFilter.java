@@ -1,9 +1,9 @@
-package me.manuelp.jfilter.sql;
+package me.manuelp.siftj.sql;
 
 import com.googlecode.totallylazy.Pair;
-import me.manuelp.jfilter.data.Range;
-import me.manuelp.jfilter.data.Sex;
-import me.manuelp.jfilter.validations.NotNull;
+import me.manuelp.siftj.data.Range;
+import me.manuelp.siftj.data.Sex;
+import me.manuelp.siftj.validations.NotNull;
 
 import java.sql.PreparedStatement;
 
