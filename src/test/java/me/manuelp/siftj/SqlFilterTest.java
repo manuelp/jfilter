@@ -1,18 +1,18 @@
-package me.manuelp.jfilter;
+package me.manuelp.siftj;
 
-import me.manuelp.jfilter.data.Sex;
-import me.manuelp.jfilter.sql.SqlFilter;
-import me.manuelp.jfilter.sql.SqlNameFilter;
-import me.manuelp.jfilter.sql.SqlPotentialFriendFilter;
+import me.manuelp.siftj.data.Sex;
+import me.manuelp.siftj.sql.SqlFilter;
+import me.manuelp.siftj.sql.SqlNameFilter;
+import me.manuelp.siftj.sql.SqlPotentialFriendFilter;
 import org.junit.Test;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static fj.P.p;
-import static me.manuelp.jfilter.data.AgeFilter.ageFilter;
-import static me.manuelp.jfilter.data.Range.range;
-import static me.manuelp.jfilter.sql.ParamIndex.paramIndex;
+import static me.manuelp.siftj.data.AgeFilter.ageFilter;
+import static me.manuelp.siftj.data.Range.range;
+import static me.manuelp.siftj.sql.ParamIndex.paramIndex;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

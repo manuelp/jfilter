@@ -1,4 +1,4 @@
-package me.manuelp.jfilter.validations;
+package me.manuelp.siftj.validations;
 
 public class NotNull {
   public static void check(Object... objs) {

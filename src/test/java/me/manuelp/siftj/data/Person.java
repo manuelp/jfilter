@@ -1,6 +1,6 @@
-package me.manuelp.jfilter.data;
+package me.manuelp.siftj.data;
 
-import me.manuelp.jfilter.validations.NotNull;
+import me.manuelp.siftj.validations.NotNull;
 
 public class Person {
   private final String name;

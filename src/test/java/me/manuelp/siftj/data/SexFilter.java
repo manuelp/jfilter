@@ -1,6 +1,6 @@
-package me.manuelp.jfilter.data;
+package me.manuelp.siftj.data;
 
-import me.manuelp.jfilter.Filter;
+import me.manuelp.siftj.Filter;
 
 public class SexFilter implements Filter<Person> {
   private final Sex sex;

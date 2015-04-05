@@ -1,4 +1,4 @@
-package me.manuelp.jfilter;
+package me.manuelp.siftj;
 
 import fj.F;
 import fj.data.Java;

@@ -1,20 +1,20 @@
-package me.manuelp.jfilter;
+package me.manuelp.siftj;
 
 import fj.F;
 import fj.F2;
 import fj.P2;
-import me.manuelp.jfilter.sql.BindParamsF;
-import me.manuelp.jfilter.sql.ParamIndex;
-import me.manuelp.jfilter.sql.SqlFilter;
-import me.manuelp.jfilter.sql.WhereClause;
+import me.manuelp.siftj.sql.BindParamsF;
+import me.manuelp.siftj.sql.ParamIndex;
+import me.manuelp.siftj.sql.SqlFilter;
+import me.manuelp.siftj.sql.WhereClause;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
 import static fj.data.List.iterableList;
-import static me.manuelp.jfilter.sql.WhereClause.concatF2;
-import static me.manuelp.jfilter.sql.WhereClause.getClauseF;
+import static me.manuelp.siftj.sql.WhereClause.concatF2;
+import static me.manuelp.siftj.sql.WhereClause.getClauseF;
 
 public class SqlFiltering {
   public static WhereClause whereClause(List<SqlFilter> sqlFilters) {

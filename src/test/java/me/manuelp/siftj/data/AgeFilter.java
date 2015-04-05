@@ -1,11 +1,11 @@
-package me.manuelp.jfilter.data;
+package me.manuelp.siftj.data;
 
 import fj.P2;
-import me.manuelp.jfilter.Filter;
-import me.manuelp.jfilter.sql.BindParamsF;
-import me.manuelp.jfilter.sql.ParamIndex;
-import me.manuelp.jfilter.sql.SqlFilter;
-import me.manuelp.jfilter.sql.WhereClause;
+import me.manuelp.siftj.Filter;
+import me.manuelp.siftj.sql.BindParamsF;
+import me.manuelp.siftj.sql.ParamIndex;
+import me.manuelp.siftj.sql.SqlFilter;
+import me.manuelp.siftj.sql.WhereClause;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

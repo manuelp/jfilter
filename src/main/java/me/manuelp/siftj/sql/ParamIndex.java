@@ -1,7 +1,7 @@
-package me.manuelp.jfilter.sql;
+package me.manuelp.siftj.sql;
 
 import fj.F;
-import me.manuelp.jfilter.validations.NotNull;
+import me.manuelp.siftj.validations.NotNull;
 
 public class ParamIndex {
   private final Integer index;

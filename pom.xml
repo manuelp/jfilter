@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.manuelp</groupId>
-    <artifactId>jfilter</artifactId>
+    <artifactId>siftj</artifactId>
     <version>0.4.0-SNAPSHOT</version>
 
     <issueManagement>
-        <url>https://github.com/manuelp/jfilter/issues</url>
+        <url>https://github.com/manuelp/siftj/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
@@ -22,9 +22,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/manuelp/jfilter</url>
-        <connection>https://github.com/manuelp/jfilter.git</connection>
-        <developerConnection>scm:git:git@github.com:manuelp/jfilter.git</developerConnection>
+        <url>https://github.com/manuelp/siftj</url>
+        <connection>https://github.com/manuelp/siftj.git</connection>
+        <developerConnection>scm:git:git@github.com:manuelp/siftj.git</developerConnection>
     </scm>
 
     <developers>

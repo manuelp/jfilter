@@ -1,4 +1,4 @@
-package me.manuelp.jfilter.sql;
+package me.manuelp.siftj.sql;
 
 import fj.P2;
 
