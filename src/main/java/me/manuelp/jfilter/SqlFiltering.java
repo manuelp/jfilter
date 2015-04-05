@@ -1,5 +1,6 @@
 package me.manuelp.jfilter;
 
+import me.manuelp.jfilter.sql.BindParamsF;
 import me.manuelp.jfilter.sql.SqlFilter;
 import me.manuelp.jfilter.sql.WhereClause;
 
@@ -14,4 +15,7 @@ public class SqlFiltering {
     return iterableList(sqlFilters).map(getClauseF()).foldLeft1(concatF2());
   }
 
+//  public static BindParamsF bindParams(List<SqlFilter> sqlFilters, int index) {
+//    iterableList(sqlFilters).
+//  }
 }

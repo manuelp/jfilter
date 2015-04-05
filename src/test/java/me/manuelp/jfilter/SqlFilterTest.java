@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 import static me.manuelp.jfilter.data.AgeFilter.ageFilter;
 import static me.manuelp.jfilter.data.Range.range;
+import static me.manuelp.jfilter.sql.ParamIndex.paramIndex;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -28,7 +29,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlNameFilter("t", "Larry");
 
-    f.bindParameter(1).f(statement);
+    f.bindParameter(paramIndex(1)).f(statement);
 
     verify(statement).setString(1, "Larry");
   }
@@ -47,10 +48,10 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
-    f.bindParameter(5).f(statement);
+    f.bindParameter(paramIndex(5)).f(statement);
 
     verify(statement).setInt(5, 18);
-    verify(statement).setInt(6, 45);
-    verify(statement).setString(7, Sex.FEMALE.name());
+    verify(statement).setInt(5 + 1, 45);
+    verify(statement).setString(5 + 2, Sex.FEMALE.name());
   }
 }

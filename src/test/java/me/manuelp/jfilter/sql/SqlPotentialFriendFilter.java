@@ -26,14 +26,14 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter(final int index) {
+  public BindParamsF bindParameter(final ParamIndex index) {
     return new BindParamsF() {
       @Override
       public PreparedStatement f(PreparedStatement statement)
           throws SQLException {
-        statement.setInt(index, range.getFrom());
-        statement.setInt(index + 1, range.getTo());
-        statement.setString(index + 2, sex.name());
+        statement.setInt(index.get(), range.getFrom());
+        statement.setInt(index.get() + 1, range.getTo());
+        statement.setString(index.get() + 2, sex.name());
         return statement;
       }
     };

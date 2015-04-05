@@ -2,6 +2,7 @@ package me.manuelp.jfilter.data;
 
 import me.manuelp.jfilter.Filter;
 import me.manuelp.jfilter.sql.BindParamsF;
+import me.manuelp.jfilter.sql.ParamIndex;
 import me.manuelp.jfilter.sql.SqlFilter;
 import me.manuelp.jfilter.sql.WhereClause;
 
@@ -30,12 +31,12 @@ public class AgeFilter implements Filter<Person>, SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter(final int index) {
+  public BindParamsF bindParameter(final ParamIndex index) {
     return new BindParamsF() {
       @Override
       public PreparedStatement f(PreparedStatement statement)
           throws SQLException {
-        statement.setInt(index, age);
+        statement.setInt(index.get(), age);
         return statement;
       }
     };

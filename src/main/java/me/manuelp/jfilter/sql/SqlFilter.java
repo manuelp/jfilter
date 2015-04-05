@@ -36,5 +36,5 @@ public interface SqlFilter {
    * @return {@link BindParamsF Function} to bind parameters values in a
    *         {@link PreparedStatement}
    */
-  BindParamsF bindParameter(int index);
+  BindParamsF bindParameter(ParamIndex index);
 }
