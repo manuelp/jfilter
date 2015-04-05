@@ -14,6 +14,14 @@ the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
+### 0.4.0-SNAPSHOT
+
+* `Filters#compose()` has been renamed to `Filters#and()`.
+* Created `WhereClause`, `BindParamsF`, `ParamIndex` types and used in `SqlFilter`.
+* Refactoring of `SqlFilter#bindParams()`, which now just return a function 
+  `Pair<ParamIndex, PreparedStatement> -> Pair<ParamIndex, PreparedStatement>` that can be *composed* easily.
+* Created `SqlFiltering` with a couple of utility functions to compose `SqlFilter`s.
+
 ### 0.3.0
 
 * `Filter<T>` is now both a `Predicate<T>` and a `Callable1<T, Boolean>`.
@@ -228,4 +236,5 @@ The public API exposed by this library (and significant for the versioning polic
 
 * `me.manuelp.jfilter.Filter` as the base class of every filter.
 * `me.manuelp.jfilter.Filters` with its generic filtering functions.
+* `me.manuelp.jfilter.SqlFilters` with its generic `SqlFilter` composing functions.
 * `me.manuelp.jfilter.sql.SqlFilter` as the contract of a SQL filter.

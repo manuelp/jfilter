@@ -6,7 +6,7 @@
 
     <groupId>me.manuelp</groupId>
     <artifactId>jfilter</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0-SNAPSHOT</version>
 
     <issueManagement>
         <url>https://github.com/manuelp/jfilter/issues</url>

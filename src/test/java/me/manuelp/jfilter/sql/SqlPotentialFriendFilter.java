@@ -1,11 +1,13 @@
 package me.manuelp.jfilter.sql;
 
+import com.googlecode.totallylazy.Pair;
 import me.manuelp.jfilter.data.Range;
 import me.manuelp.jfilter.data.Sex;
 import me.manuelp.jfilter.validations.NotNull;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
+import static com.googlecode.totallylazy.Pair.pair;
 
 public class SqlPotentialFriendFilter implements SqlFilter {
   private final Range range;
@@ -20,16 +22,25 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return String.format("(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef,
-      tableRef);
+  public WhereClause whereClause() {
+    return new WhereClause(String.format(
+      "(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setInt(index, range.getFrom());
-    statement.setInt(index + 1, range.getTo());
-    statement.setString(index + 2, sex.name());
+  public BindParamsF bindParameter() {
+
+    return new BindParamsF() {
+      @Override
+      public Pair<ParamIndex, PreparedStatement> call(
+          Pair<ParamIndex, PreparedStatement> p) throws Exception {
+        ParamIndex index = p.first();
+        PreparedStatement statement = p.second();
+        statement.setInt(index.get(), range.getFrom());
+        statement.setInt(index.add(1).get(), range.getTo());
+        statement.setString(index.add(2).get(), sex.name());
+        return pair(index.add(3), statement);
+      }
+    };
   }
 }

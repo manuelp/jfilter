@@ -31,7 +31,7 @@ public class Filters {
    * @param <T> Type of values that filters can match against.
    * @return Filter obtained by composing in AND all input filters
    */
-  public static <T> Filter<T> compose(final List<Filter<T>> filters) {
+  public static <T> Filter<T> and(final List<Filter<T>> filters) {
     return new Filter<T>() {
       @Override
       public boolean matches(T t) {
@@ -51,6 +51,6 @@ public class Filters {
    *         <em>all</em> the given filters
    */
   public static <T> List<T> filter(List<Filter<T>> filters, List<T> values) {
-    return filter(compose(filters), values);
+    return filter(and(filters), values);
   }
 }

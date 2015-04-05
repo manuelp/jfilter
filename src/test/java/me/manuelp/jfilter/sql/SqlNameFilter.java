@@ -1,7 +1,10 @@
 package me.manuelp.jfilter.sql;
 
+import com.googlecode.totallylazy.Pair;
+
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
+import static com.googlecode.totallylazy.Pair.pair;
 
 public class SqlNameFilter implements SqlFilter {
   private String tableRef;
@@ -13,13 +16,21 @@ public class SqlNameFilter implements SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return tableRef + "." + name + "=?";
+  public WhereClause whereClause() {
+    return new WhereClause(tableRef + "." + name + "=?");
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setString(index, name);
+  public BindParamsF bindParameter() {
+    return new BindParamsF() {
+      @Override
+      public Pair<ParamIndex, PreparedStatement> call(
+          Pair<ParamIndex, PreparedStatement> p) throws Exception {
+        ParamIndex index = p.first();
+        PreparedStatement statement = p.second();
+        statement.setString(index.get(), name);
+        return pair(index.succ(), statement);
+      }
+    };
   }
 }
