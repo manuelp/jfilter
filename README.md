@@ -44,26 +44,30 @@ First release with a first formulation of the `Filter` concept and basic mechani
 Conceptually, filtering some *data* can be seen as a predicate function:
 
 ```haskell
-filter :: a -> Bool
+matches :: a -> Bool
 ```
 
-This concept can be abstracted further by defining a matching function:
+However, defining filters this way means that every possible predicate from an implementation perspective is a totally different function. For example, if we have a `Person` and we want to filter its values by age, matching if a person age is 19 or 20 has to be done with two different ad-hoc function.
+
+Clearly we can do better and use *higher-order functions* (or currying):
 
 ```haskell
-matches :: a -> b -> Bool
+filterByAge :: Int -> Person -> Bool
 ```
 
-Where `a` is the *value of a filter* and `b` is *the type of the values to match against that filter value*.
+We can also have multiple arguments:
+
+```haskell
+filterByAgeRange :: Int -> Int -> Person -> Bool
+```
 
 In a Java context, we can model a filter as a partially applied function:
 
-* Every filter is a statically typed class of objects that implements that `matches` function.
-* The `a` type is fixed by creating a specific `Filter` derived class, and the partial application of the `matches` 
-  function is done by passing an `a` value to the constructor.
-* The resulting function `b -> Bool` can be applied to a `b` value directly by calling the `Predicate#matches()` method of
-  a `Filter` derived class instance.
+* Every filter is a statically typed class of objects that implements a `matches` function: it takes a value of a certain type and returns a boolean.
+* A filter can be made parametric by requiring parameters at construction time via its constructor. This way, in some sense we are partially applying a filtering function (to the constructor parameters).
+* When we have a `Filter` instance, we can apply its `matches` method to match values of the required type.
   
-Actually, using TotallyLazy a `Filter<T>` is a `Predicate<T>` and a `Callable1<T, Boolean>`.
+Actually, (courtesy of TotallyLazy) a `Filter<T>` is a [`Predicate<T>`](https://github.com/bodar/totallylazy/blob/master/src/com/googlecode/totallylazy/Predicate.java) and a [`Callable1<T, Boolean>`](https://github.com/bodar/totallylazy/blob/master/src/com/googlecode/totallylazy/Callable1.java).
   
 This way, we can write generic and type-safe filtering operations by *composing filters*.
 
@@ -78,8 +82,8 @@ A filter in a JDBC context can be viewed as a couple of related operations:
 a couple of considerations to make:
 
 1. Every object can be a `SqlFilter`, even a `Filter` implementation. In the last case, both POJOs and JDBC filtering 
-   can be implemented in the same class (this is not to say that it's the right thing to do or the suggested way to use 
-   this interface).
+   can be implemented in the same class (this is not to say that it's the right thing to do or the suggested way to
+   use this interface).
 2. There is no prescription on how a `SqlFilter` type has to be instantiated: we cannot possibly predict all the use
    cases (JOINs w/ multiple table references, columns renames, etc). So **you have a lot of flexibility 
    (and responsibility) to correctly *design* a viable clean and maintainable querying strategy**.
@@ -160,14 +164,22 @@ public class SqlNameFilter implements SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return tableRef + "." + name + "=?";
+  public WhereClause whereClause() {
+    return WhereClause.whereClause(tableRef + "." + name + "=?");
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setString(index, name);
+  public BindParamsF bindParameter() {
+    return new BindParamsF() {
+      @Override
+      public Pair<ParamIndex, PreparedStatement> call(
+          Pair<ParamIndex, PreparedStatement> p) throws Exception {
+        ParamIndex index = p.first();
+        PreparedStatement statement = p.second();
+        statement.setString(index.get(), name);
+        return pair(index.succ(), statement);
+      }
+    };
   }
 }
 ```
@@ -176,14 +188,14 @@ Then you can use this filter to obtain a WHERE clause:
 
 ```java
 SqlFilter f = new SqlNameFilter("p", "name");
-String c = f.whereClause();
-// c = "p.name=?"
+WhereClause c = f.whereClause();
+// c.getClause() = "p.name=?"
 ```
 
 And to bind the parameter in a full JDBC query:
 
 ```java
-f.bindParameters(statement, 4);
+f.bindParameters().call(Pair.pair(ParamIndex.paramIndex(4), statement));
 // statement.setString(4, "name");
 ```
 
@@ -203,17 +215,25 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public String whereClause() {
-    return String.format("(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef,
-      tableRef);
+  public WhereClause whereClause() {
+    return new WhereClause(String.format(
+      "(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
   }
 
   @Override
-  public void bindParameter(PreparedStatement statement, int index)
-      throws SQLException {
-    statement.setInt(index, range.getFrom());
-    statement.setInt(index + 1, range.getTo());
-    statement.setString(index + 2, sex.name());
+  public BindParamsF bindParameter() {
+    return new BindParamsF() {
+      @Override
+      public Pair<ParamIndex, PreparedStatement> call(
+          Pair<ParamIndex, PreparedStatement> p) throws Exception {
+        ParamIndex index = p.first();
+        PreparedStatement statement = p.second();
+        statement.setInt(index.get(), range.getFrom());
+        statement.setInt(index.add(1).get(), range.getTo());
+        statement.setString(index.add(2).get(), sex.name());
+        return pair(index.add(3), statement);
+      }
+    };
   }
 }
 ```
@@ -237,4 +257,4 @@ The public API exposed by this library (and significant for the versioning polic
 * `me.manuelp.siftj.Filter` as the base class of every filter.
 * `me.manuelp.siftj.Filters` with its generic filtering functions.
 * `me.manuelp.siftj.SqlFilters` with its generic `SqlFilter` composing functions.
-* `me.manuelp.siftj.sql.SqlFilter` as the contract of a SQL filter.
+* `me.manuelp.siftj.sql.*` with the contract of a `SqlFilter` with its supporting value types.
