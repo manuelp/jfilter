@@ -14,7 +14,7 @@ the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
-### 0.4.0-SNAPSHOT
+### 0.4.0
 
 * `Filters#compose()` has been renamed to `Filters#and()`.
 * Created `WhereClause`, `BindParamsF`, `ParamIndex` types and used in `SqlFilter`.
@@ -86,7 +86,7 @@ a couple of considerations to make:
    use this interface).
 2. There is no prescription on how a `SqlFilter` type has to be instantiated: we cannot possibly predict all the use
    cases (JOINs w/ multiple table references, columns renames, etc). So **you have a lot of flexibility 
-   (and responsibility) to correctly *design* a viable clean and maintainable querying strategy**.
+   (and responsibility) to correctly *design* a viable, clean and maintainable querying strategy**.
 
 ## Usage
 
