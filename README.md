@@ -14,6 +14,10 @@ the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
+### 0.4.1
+
+* Renamed `SqlFiltering` to `SqlFilters`.
+
 ### 0.4.0
 
 * `Filters#compose()` has been renamed to `Filters#and()`.

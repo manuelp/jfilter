@@ -16,14 +16,14 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class SqlFilteringTest {
+public class SqlFiltersTest {
   @Test
   public void canComposeWhereClauses() {
     SqlNameFilter f1 = new SqlNameFilter("p", "Frank");
     SqlPotentialFriendFilter f2 = new SqlPotentialFriendFilter(Range.range(20,
       30), Sex.MALE, "p");
 
-    WhereClause clause = SqlFiltering.whereClause(Arrays.asList(f1, f2));
+    WhereClause clause = SqlFilters.whereClause(Arrays.asList(f1, f2));
 
     assertEquals(String.format("(%s) AND (%s)", f1.whereClause().getClause(),
       f2.whereClause().getClause()), clause.getClause());
@@ -36,7 +36,7 @@ public class SqlFilteringTest {
       30), Sex.MALE, "p");
     PreparedStatement s = mock(PreparedStatement.class);
 
-    SqlFiltering.bindParams(Arrays.asList(f1, f2)).call(pair(paramIndex(3), s));
+    SqlFilters.bindParams(Arrays.asList(f1, f2)).call(pair(paramIndex(3), s));
 
     verify(s).setString(3, "Frank");
     verify(s).setInt(4, 20);

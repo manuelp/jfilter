@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class SqlFiltering {
+public class SqlFilters {
   public static WhereClause whereClause(List<SqlFilter> sqlFilters) {
     String whereClauseString = sequence(sqlFilters).map(getWhereClauseF())
         .map(toEnclosedString()).intersperse(" AND ")

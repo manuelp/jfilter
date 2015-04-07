@@ -6,7 +6,7 @@
 
     <groupId>me.manuelp</groupId>
     <artifactId>siftj</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.1</version>
 
     <issueManagement>
         <url>https://github.com/manuelp/siftj/issues</url>

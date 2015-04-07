@@ -11,7 +11,7 @@ import static me.manuelp.siftj.data.AgeFilter.ageFilter;
 import static me.manuelp.siftj.data.SexFilter.sexFilter;
 import static org.junit.Assert.assertEquals;
 
-public class FilteringTest {
+public class FiltersTest {
   @Test
   public void canApplyAFilterToAListOfValues() {
     Person p1 = new Person("_", "_", 17, Sex.FEMALE);
