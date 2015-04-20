@@ -19,6 +19,12 @@ import static com.googlecode.totallylazy.Sequences.sequence;
  * Defines some generic functions on {@link SqlFilter}.
  */
 public class SqlFilters {
+  /**
+   * Compose multiple {@link SqlFilter} in AND.
+   *
+   * @param sqlFilters List of {@link SqlFilter} to combine.
+   * @return {@link SqlFilter} that combines in AND the given ones.
+   */
   public static SqlFilter and(final List<SqlFilter> sqlFilters) {
     return new SqlFilter() {
       @Override
@@ -99,6 +105,12 @@ public class SqlFilters {
     };
   }
 
+  /**
+   * Compose multiple {@link SqlFilter} in OR.
+   *
+   * @param sqlFilters List of {@link SqlFilter} to combine.
+   * @return {@link SqlFilter} that combines in OR the given ones.
+   */
   public static SqlFilter or(final List<SqlFilter> sqlFilters) {
     return new SqlFilter() {
       @Override
