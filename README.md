@@ -77,7 +77,7 @@ In a Java context, we can model a filter as a partially applied function:
   
 Actually, (courtesy of TotallyLazy) a `Filter<T>` is a [`Predicate<T>`](https://github.com/bodar/totallylazy/blob/master/src/com/googlecode/totallylazy/Predicate.java) and a [`Callable1<T, Boolean>`](https://github.com/bodar/totallylazy/blob/master/src/com/googlecode/totallylazy/Callable1.java).
   
-This way, we can write generic and type-safe filtering operations by *composing filters*.
+This way, we can write generic and type-safe filtering operations by *composing filters*. Both AND and OR combinators are implemented.
 
 ### JDBC filters
 
@@ -151,10 +151,24 @@ List<Person> results = Filters.filter(
   Arrays.asList(p1, p2, p3));
 ```
 
-We can even *chain filters together in AND*:
+We can even *combine filters together using the AND operator*:
 
 ```java
-Filter<Person> compFilter = Filters.compose(ageFilter(25), sexFilter(Sex.FEMALE));
+Filter<Person> compFilter = Filters.and(ageFilter(25), sexFilter(Sex.FEMALE));
+```
+
+We can compose filters also with the *OR operator*:
+
+```java
+Filter<Person> compFilter = Filters.or(ageFilter(25), sexFilter(Sex.FEMALE));
+```
+
+Since these combinators operates on `Filter`s (are function `[Filter] -> Filter`), they can be freely combined:
+
+```java
+Filters.or(Filters.and(ageFilter(25), sexFilter(Sex.FEMALE)),
+           Filters.and(ageFilter(21), sexFilter(Sex.MALE)),
+           ageFilter(31));
 ```
 
 ### JDBC filtering
