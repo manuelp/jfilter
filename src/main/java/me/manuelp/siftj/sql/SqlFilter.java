@@ -35,5 +35,6 @@ public interface SqlFilter {
    * @return {@link BindParamsF Function} to bind parameters values in a
    *         {@link PreparedStatement}
    */
+  // TODO Rename in "bindParameters"
   BindParamsF bindParameter();
 }

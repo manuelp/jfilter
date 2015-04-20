@@ -1,5 +1,6 @@
 package me.manuelp.siftj;
 
+import me.manuelp.siftj.data.AgeFilter;
 import me.manuelp.siftj.data.Range;
 import me.manuelp.siftj.data.Sex;
 import me.manuelp.siftj.sql.SqlFilter;
@@ -24,7 +25,7 @@ public class SqlFiltersTest {
     SqlPotentialFriendFilter f2 = new SqlPotentialFriendFilter(Range.range(20,
       30), Sex.MALE, "p");
 
-    WhereClause clause = SqlFilters.whereClause().and(Arrays.asList(f1, f2));
+    WhereClause clause = SqlFilters.and(Arrays.asList(f1, f2)).whereClause();
 
     assertEquals(String.format("(%s) AND (%s)", f1.whereClause().getClause(),
       f2.whereClause().getClause()), clause.getClause());
@@ -35,10 +36,25 @@ public class SqlFiltersTest {
     SqlFilter f1 = new SqlNameFilter("p", "Frank");
     SqlFilter f2 = new SqlNameFilter("p", "Jerry");
 
-    WhereClause clause = SqlFilters.whereClause().or(Arrays.asList(f1, f2));
+    WhereClause clause = SqlFilters.or(Arrays.asList(f1, f2)).whereClause();
 
-    assertEquals(String.format("(%s) OR (%s)", f1.whereClause().getClause(),
-      f2.whereClause().getClause()), clause.getClause());
+    assertEquals(String.format("(%s) OR (%s)", f1.whereClause().getClause(), f2
+        .whereClause().getClause()), clause.getClause());
+  }
+
+  @Test
+  public void canComposeWhereClausesInOrAndAnd() {
+    SqlFilter f1 = new SqlNameFilter("p", "Frank");
+    SqlFilter f2 = new SqlNameFilter("p", "Jerry");
+    SqlFilter f3 = new AgeFilter(31);
+
+    SqlFilter c1 = SqlFilters.and(Arrays.asList(f1, f3));
+    SqlFilter c2 = SqlFilters.or(Arrays.asList(c1, f2));
+    WhereClause whereClause = c2.whereClause();
+
+    assertEquals(String.format("((%s) AND (%s)) OR (%s)", f1.whereClause()
+        .getClause(), f3.whereClause().getClause(), f2.whereClause()
+        .getClause()), whereClause.getClause());
   }
 
   @Test
@@ -48,7 +64,7 @@ public class SqlFiltersTest {
       30), Sex.MALE, "p");
     PreparedStatement s = mock(PreparedStatement.class);
 
-    SqlFilters.bindParams().and(Arrays.asList(f1, f2))
+    SqlFilters.and(Arrays.asList(f1, f2)).bindParameter()
         .call(pair(paramIndex(3), s));
 
     verify(s).setString(3, "Frank");
