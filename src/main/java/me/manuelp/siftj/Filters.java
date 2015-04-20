@@ -8,7 +8,7 @@ import java.util.List;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 /**
- * Defines some generic filtering functions.
+ * Defines some generic filtering functions on {@link Filter}s.
  */
 public class Filters {
   /**

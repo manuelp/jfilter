@@ -15,7 +15,17 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
+/**
+ * Defines some generic functions on {@link SqlFilter}.
+ */
 public class SqlFilters {
+  /**
+   * Compose multiple {@link SqlFilter}s in AND, generating the corresponding
+   * {@link WhereClause}.
+   *
+   * @param sqlFilters List of {@link SqlFilter} to compose
+   * @return Resulting {@link WhereClause}
+   */
   public static WhereClause whereClause(List<SqlFilter> sqlFilters) {
     String whereClauseString = sequence(sqlFilters).map(getWhereClauseF())
         .map(toEnclosedString()).intersperse(" AND ")
@@ -41,6 +51,13 @@ public class SqlFilters {
     };
   }
 
+  /**
+   * Compose multiple {@link SqlFilter}s in AND, generating the corresponding
+   * {@link BindParamsF}.
+   *
+   * @param sqlFilters List of {@link SqlFilter} to compose
+   * @return Resulting {@link BindParamsF}
+   */
   public static BindParamsF bindParams(final List<SqlFilter> sqlFilters) {
     return sequence(sqlFilters).map(getBindParamsF()).foldLeft(bindParamsId(),
       composeBindParamsF());
