@@ -64,7 +64,7 @@ public class SqlFiltersTest {
       30), Sex.MALE, "p");
     PreparedStatement s = mock(PreparedStatement.class);
 
-    SqlFilters.and(Arrays.asList(f1, f2)).bindParameter()
+    SqlFilters.and(Arrays.asList(f1, f2)).bindParameters()
         .call(pair(paramIndex(3), s));
 
     verify(s).setString(3, "Frank");
@@ -79,7 +79,7 @@ public class SqlFiltersTest {
     SqlFilter f2 = new SqlNameFilter("p", "James");
     PreparedStatement s = mock(PreparedStatement.class);
 
-    SqlFilters.and(Arrays.asList(f1, f2)).bindParameter()
+    SqlFilters.and(Arrays.asList(f1, f2)).bindParameters()
         .call(pair(paramIndex(3), s));
 
     verify(s).setString(3, "Frank");
@@ -95,7 +95,7 @@ public class SqlFiltersTest {
 
     SqlFilter c1 = SqlFilters.and(Arrays.asList(f1, f3));
     SqlFilter c2 = SqlFilters.or(Arrays.asList(c1, f2));
-    c2.bindParameter().call(pair(paramIndex(1), s));
+    c2.bindParameters().call(pair(paramIndex(1), s));
 
     verify(s).setString(1, "Frank");
     verify(s).setInt(2, 31);

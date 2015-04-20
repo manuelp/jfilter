@@ -30,7 +30,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlNameFilter("t", "Larry");
 
-    f.bindParameter().call(Pair.pair(ParamIndex.paramIndex(1), statement));
+    f.bindParameters().call(Pair.pair(ParamIndex.paramIndex(1), statement));
 
     verify(statement).setString(1, "Larry");
   }
@@ -48,7 +48,7 @@ public class SqlFilterTest {
     PreparedStatement statement = mock(PreparedStatement.class);
     SqlFilter f = new SqlPotentialFriendFilter(range(18, 45), Sex.FEMALE, "p");
 
-    f.bindParameter().call(Pair.pair(ParamIndex.paramIndex(5), statement));
+    f.bindParameters().call(Pair.pair(ParamIndex.paramIndex(5), statement));
 
     verify(statement).setInt(5, 18);
     verify(statement).setInt(6, 45);

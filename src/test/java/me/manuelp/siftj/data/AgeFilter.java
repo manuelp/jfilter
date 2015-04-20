@@ -33,7 +33,7 @@ public class AgeFilter extends Filter<Person> implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter() {
+  public BindParamsF bindParameters() {
     return new BindParamsF() {
       @Override
       public Pair<ParamIndex, PreparedStatement> call(

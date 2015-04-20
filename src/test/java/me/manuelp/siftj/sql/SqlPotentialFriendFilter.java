@@ -28,7 +28,7 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter() {
+  public BindParamsF bindParameters() {
 
     return new BindParamsF() {
       @Override

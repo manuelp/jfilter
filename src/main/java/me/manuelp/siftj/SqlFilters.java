@@ -33,7 +33,7 @@ public class SqlFilters {
       }
 
       @Override
-      public BindParamsF bindParameter() {
+      public BindParamsF bindParameters() {
         return composeBindParamsF(sqlFilters);
       }
     };
@@ -74,7 +74,7 @@ public class SqlFilters {
     return new Callable1<SqlFilter, BindParamsF>() {
       @Override
       public BindParamsF call(SqlFilter sqlFilter) throws Exception {
-        return sqlFilter.bindParameter();
+        return sqlFilter.bindParameters();
       }
     };
   }
@@ -119,7 +119,7 @@ public class SqlFilters {
       }
 
       @Override
-      public BindParamsF bindParameter() {
+      public BindParamsF bindParameters() {
         return composeBindParamsF(sqlFilters);
       }
     };

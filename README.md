@@ -17,7 +17,8 @@ the most generic ones (callables, predicates, etc).
 ### 1.0.0-SNAPSHOT
 
 * Added `Filters#or()` composing operator.
-* ...
+* Refactored `SqlFilters` to expose generic `#and()` and `#or()` operators as `SqlFilter` combinators.
+* Renamed method: `SqlFilter#bindParameter()` -> `SqlFilter#bindParameters()`.
 
 ### 0.4.1
 
@@ -192,7 +193,7 @@ public class SqlNameFilter implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter() {
+  public BindParamsF bindParameters() {
     return new BindParamsF() {
       @Override
       public Pair<ParamIndex, PreparedStatement> call(
@@ -244,7 +245,7 @@ public class SqlPotentialFriendFilter implements SqlFilter {
   }
 
   @Override
-  public BindParamsF bindParameter() {
+  public BindParamsF bindParameters() {
     return new BindParamsF() {
       @Override
       public Pair<ParamIndex, PreparedStatement> call(
