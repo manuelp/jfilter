@@ -66,4 +66,20 @@ public class FiltersTest {
     assertTrue(results.contains(p1));
     assertTrue(results.contains(p2));
   }
+
+  @Test
+  public void filtersCanBeComposedInBothInAndAndOr() {
+    Person p1 = new Person("_", "_", 25, Sex.FEMALE);
+    Person p2 = new Person("_", "_", 17, Sex.MALE);
+    Person p3 = new Person("_", "_", 21, Sex.MALE);
+
+    Filter<Person> f1 = Filters.and(Arrays.asList(ageFilter(21),
+      sexFilter(Sex.MALE)));
+    Filter<Person> f2 = Filters.or(Arrays.asList(f1, sexFilter(Sex.FEMALE)));
+    List<Person> results = Filters.filter(f2, Arrays.asList(p1, p2, p3));
+
+    assertEquals(2, results.size());
+    assertTrue(results.contains(p1));
+    assertTrue(results.contains(p3));
+  }
 }
