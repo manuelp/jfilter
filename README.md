@@ -262,6 +262,21 @@ public class SqlPotentialFriendFilter implements SqlFilter {
 }
 ```
 
+You can also *compose* `SqlFilter` instances with the AND or OR operators:
+
+```java
+SqlFilter composedFilter = SqlFilters.or(new SqlNameFilter("p", "name"),
+                                         new SqlNameFilter("p", "nomai"))
+```
+
+A more complex example:
+
+```java
+SqlFilter cf = SqlFilters.or(new SqlNameFilter("p", "Jerry"),
+                             SqlFilters.and(new SqlNameFilter("p", "Mary"),
+							                new AgeFilter(28)));
+```
+
 ## Contribution guidelines
 
 * This component is versioned according to [Semantic Versioning](http://semver.org/),
