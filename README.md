@@ -17,6 +17,7 @@ the most generic ones (callables, predicates, etc).
 ### 1.0.0-SNAPSHOT
 
 * Added `Filters#or()` composing operator.
+* ...
 
 ### 0.4.1
 

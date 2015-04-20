@@ -2,6 +2,7 @@ package me.manuelp.siftj;
 
 import me.manuelp.siftj.data.Range;
 import me.manuelp.siftj.data.Sex;
+import me.manuelp.siftj.sql.SqlFilter;
 import me.manuelp.siftj.sql.SqlNameFilter;
 import me.manuelp.siftj.sql.SqlPotentialFriendFilter;
 import me.manuelp.siftj.sql.WhereClause;
@@ -18,25 +19,37 @@ import static org.mockito.Mockito.verify;
 
 public class SqlFiltersTest {
   @Test
-  public void canComposeWhereClauses() {
+  public void canComposeWhereClausesInAnd() {
     SqlNameFilter f1 = new SqlNameFilter("p", "Frank");
     SqlPotentialFriendFilter f2 = new SqlPotentialFriendFilter(Range.range(20,
       30), Sex.MALE, "p");
 
-    WhereClause clause = SqlFilters.whereClause(Arrays.asList(f1, f2));
+    WhereClause clause = SqlFilters.whereClause().and(Arrays.asList(f1, f2));
 
     assertEquals(String.format("(%s) AND (%s)", f1.whereClause().getClause(),
       f2.whereClause().getClause()), clause.getClause());
   }
 
   @Test
-  public void canComposeParamsBinding() throws Exception {
+  public void canComposeWhereClausesInOr() {
+    SqlFilter f1 = new SqlNameFilter("p", "Frank");
+    SqlFilter f2 = new SqlNameFilter("p", "Jerry");
+
+    WhereClause clause = SqlFilters.whereClause().or(Arrays.asList(f1, f2));
+
+    assertEquals(String.format("(%s) OR (%s)", f1.whereClause().getClause(),
+      f2.whereClause().getClause()), clause.getClause());
+  }
+
+  @Test
+  public void canComposeParamsBindingInAnd() throws Exception {
     SqlNameFilter f1 = new SqlNameFilter("p", "Frank");
     SqlPotentialFriendFilter f2 = new SqlPotentialFriendFilter(Range.range(20,
       30), Sex.MALE, "p");
     PreparedStatement s = mock(PreparedStatement.class);
 
-    SqlFilters.bindParams(Arrays.asList(f1, f2)).call(pair(paramIndex(3), s));
+    SqlFilters.bindParams().and(Arrays.asList(f1, f2))
+        .call(pair(paramIndex(3), s));
 
     verify(s).setString(3, "Frank");
     verify(s).setInt(4, 20);
