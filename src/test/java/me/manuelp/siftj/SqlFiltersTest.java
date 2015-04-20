@@ -72,4 +72,33 @@ public class SqlFiltersTest {
     verify(s).setInt(5, 30);
     verify(s).setString(6, Sex.MALE.name());
   }
+
+  @Test
+  public void canComposeParamsBindingInOr() throws Exception {
+    SqlFilter f1 = new SqlNameFilter("p", "Frank");
+    SqlFilter f2 = new SqlNameFilter("p", "James");
+    PreparedStatement s = mock(PreparedStatement.class);
+
+    SqlFilters.and(Arrays.asList(f1, f2)).bindParameter()
+        .call(pair(paramIndex(3), s));
+
+    verify(s).setString(3, "Frank");
+    verify(s).setString(4, "James");
+  }
+
+  @Test
+  public void canComposeParamsBindingInOrAndAnd() throws Exception {
+    SqlFilter f1 = new SqlNameFilter("p", "Frank");
+    SqlFilter f2 = new SqlNameFilter("p", "Jerry");
+    SqlFilter f3 = new AgeFilter(31);
+    PreparedStatement s = mock(PreparedStatement.class);
+
+    SqlFilter c1 = SqlFilters.and(Arrays.asList(f1, f3));
+    SqlFilter c2 = SqlFilters.or(Arrays.asList(c1, f2));
+    c2.bindParameter().call(pair(paramIndex(1), s));
+
+    verify(s).setString(1, "Frank");
+    verify(s).setInt(2, 31);
+    verify(s).setString(3, "Jerry");
+  }
 }
