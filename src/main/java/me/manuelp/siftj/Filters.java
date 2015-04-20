@@ -2,6 +2,7 @@ package me.manuelp.siftj;
 
 import com.googlecode.totallylazy.Predicates;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -41,9 +42,25 @@ public class Filters {
   }
 
   /**
+   * Compose in OR multiple filters on the same type in a single filter.
+   *
+   * @param filters Filters to combine (in OR).
+   * @param <T> Type of values that filters can match against.
+   * @return Filter obtained by composing in OR all input filters
+   */
+  public static <T> Filter<T> or(final List<Filter<T>> filters) {
+    return new Filter<T>() {
+      @Override
+      public boolean matches(T t) {
+        return Predicates.or(filters).matches(t);
+      }
+    };
+  }
+
+  /**
    * Generic type-safe filtering functions to apply a list of {@link Filter
    * filters} to a list of values.
-   * 
+   *
    * @param filters List of {@link Filter filters} to apply
    * @param values List of values
    * @param <T> Type of the values to filter

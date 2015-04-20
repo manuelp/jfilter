@@ -14,6 +14,10 @@ the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
+### 1.0.0-SNAPSHOT
+
+* Added `Filters#or()` composing operator.
+
 ### 0.4.1
 
 * Renamed `SqlFiltering` to `SqlFilters`.
