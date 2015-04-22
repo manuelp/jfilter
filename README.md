@@ -14,6 +14,10 @@ the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
+### 1.1.0-SNAPSHOT
+
+* Added predicate `WhereClause#isEmpty()`.
+
 ### 1.0.0
 
 * Added `Filters#or()` composing operator.

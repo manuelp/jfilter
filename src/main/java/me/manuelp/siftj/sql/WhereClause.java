@@ -43,6 +43,15 @@ public class WhereClause {
       c.getClause()));
   }
 
+  /**
+   * Checks if this {@link WhereClause} is empty.
+   *
+   * @return True if empty, false otherwise.
+   */
+  public boolean isEmpty() {
+    return clause.isEmpty();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o)
