@@ -7,7 +7,7 @@ used to filter POJOs/value objects, or to manage JDBC filters (WHERE clauses and
 
 ## Maturity level
 
-This is a POC: the API should be considered *alpha*, and may be subject to change.
+This is a POC: the API should be considered *beta*, and may be subject to change.
 
 Right now, we have a small number of primitives and functions that rely on [TotallyLazy](http://totallylazy.com/) for
 the most generic ones (callables, predicates, etc).
@@ -95,9 +95,9 @@ A filter in a JDBC context can be viewed as a couple of related operations:
 *siftj* defined an interface that specifies this contract: `SqlFilter`. Being an interface, there are 
 a couple of considerations to make:
 
-1. Every object can be a `SqlFilter`, even a `Filter` implementation. In the last case, both POJOs and JDBC filtering 
-   can be implemented in the same class (this is not to say that it's the right thing to do or the suggested way to
-   use this interface).
+1. Every object can be a `SqlFilter`, even a `Filter` implementation. In the latter case, both POJOs and JDBC
+   filtering can be implemented in the same class (this is not to say that it's the right thing to do or the suggested
+   way to use this interface).
 2. There is no prescription on how a `SqlFilter` type has to be instantiated: we cannot possibly predict all the use
    cases (JOINs w/ multiple table references, columns renames, etc). So **you have a lot of flexibility 
    (and responsibility) to correctly *design* a viable, clean and maintainable querying strategy**.
@@ -112,12 +112,12 @@ Define a POJO/value object:
 
 ```java
 public class Person {
-  private final String name;
-  private final String surname;
-  private final int age;
-  private final Sex sex;
-  
-  // ...
+  // [...]
+
+  public String getName() { /* ... */ }
+  public String getSurname() { /* ... */ }
+  public int getAge() { /* ... */ }
+  public Sex getSex() { /* ... */ }
 }
 ```
 
@@ -146,7 +146,7 @@ Use all the filters defined this way to filter `Person` values by using the `Fil
 single filter to a list of compatible values:
 
 ```java
-List<Person> results = Filters.filter(AgeFilter.ageFilter(21), Arrays.asList(p1, p2));
+List<Person> results = Filters.filter(ageFilter(21), Arrays.asList(p1, p2));
 ```
 
 We can also apply a *list of filters* to a list of compatible values:
@@ -220,7 +220,7 @@ WhereClause c = f.whereClause();
 // c.getClause() = "p.name=?"
 ```
 
-And to bind the parameter in a full JDBC query:
+And to bind the parameters in a full JDBC query:
 
 ```java
 f.bindParameters().call(Pair.pair(ParamIndex.paramIndex(4), statement));
