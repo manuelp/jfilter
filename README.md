@@ -63,15 +63,11 @@ matches :: a -> Bool
 
 However, defining filters this way means that every possible predicate from an implementation perspective is a totally different function. For example, if we have a `Person` and we want to filter its values by age, matching if a person age is 19 or 20 has to be done with two different ad-hoc function.
 
-Clearly we can do better and use *higher-order functions* (or currying):
+Clearly we can do better and use *parametric predicates*, obtaining a predicate by *partial application* (even better with currying):
 
 ```haskell
 filterByAge :: Int -> Person -> Bool
-```
 
-We can also have multiple arguments:
-
-```haskell
 filterByAgeRange :: Int -> Int -> Person -> Bool
 ```
 
