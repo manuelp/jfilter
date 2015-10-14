@@ -1,11 +1,18 @@
 package me.manuelp.siftj.sql;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Pair;
+import fj.P2;
+import fj.function.Try1;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public interface BindParamsF
-    extends
-    Callable1<Pair<ParamIndex, PreparedStatement>, Pair<ParamIndex, PreparedStatement>> {
+/**
+ * Binder function that tries to bind parameters in a given
+ * {@link PreparedStatement}, starting from the given {@link ParamIndex}.
+ *
+ * @see SqlFilter
+ * @see WhereClause
+ */
+public interface BindParamsF extends
+    Try1<P2<ParamIndex, PreparedStatement>, P2<ParamIndex, PreparedStatement>, SQLException> {
 }

@@ -1,13 +1,14 @@
 package me.manuelp.siftj.sql;
 
-import com.googlecode.totallylazy.Pair;
+import fj.P2;
 import me.manuelp.siftj.data.Range;
 import me.manuelp.siftj.data.Sex;
 import me.manuelp.siftj.validations.NotNull;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import static com.googlecode.totallylazy.Pair.pair;
+import static fj.P.p;
 
 public class SqlPotentialFriendFilter implements SqlFilter {
   private final Range range;
@@ -23,23 +24,22 @@ public class SqlPotentialFriendFilter implements SqlFilter {
 
   @Override
   public WhereClause whereClause() {
-    return new WhereClause(String.format(
-      "(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
+    return WhereClause.whereClause(String
+        .format("(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
   }
 
   @Override
   public BindParamsF bindParameters() {
-
     return new BindParamsF() {
       @Override
-      public Pair<ParamIndex, PreparedStatement> call(
-          Pair<ParamIndex, PreparedStatement> p) throws Exception {
-        ParamIndex index = p.first();
-        PreparedStatement statement = p.second();
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
+        ParamIndex index = p._1();
+        PreparedStatement statement = p._2();
         statement.setInt(index.get(), range.getFrom());
         statement.setInt(index.add(1).get(), range.getTo());
         statement.setString(index.add(2).get(), sex.name());
-        return pair(index.add(3), statement);
+        return p(index.add(3), statement);
       }
     };
   }

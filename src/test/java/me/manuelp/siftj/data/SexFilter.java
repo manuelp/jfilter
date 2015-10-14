@@ -2,10 +2,10 @@ package me.manuelp.siftj.data;
 
 import me.manuelp.siftj.Filter;
 
-public class SexFilter extends Filter<Person> {
+public class SexFilter implements Filter<Person> {
   private final Sex sex;
 
-  public SexFilter(Sex v) {
+  private SexFilter(Sex v) {
     this.sex = v;
   }
 
@@ -14,7 +14,7 @@ public class SexFilter extends Filter<Person> {
   }
 
   @Override
-  public boolean matches(Person p) {
+  public Boolean f(Person p) {
     return p.getSex() == sex;
   }
 }

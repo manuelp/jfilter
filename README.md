@@ -7,16 +7,20 @@ used to filter POJOs/value objects, or to manage JDBC filters (WHERE clauses and
 
 ## Maturity level
 
-This is a POC: the API should be considered *beta*, and may be subject to change.
+This library has been used in production for some time, however the API should stille be considered *beta*, and may be subject to change.
 
-Right now, we have a small number of primitives and functions that rely on [TotallyLazy](http://totallylazy.com/) for
-the most generic ones (callables, predicates, etc).
+Right now, we have a small number of primitives and functions that rely on [Functional Java](http://www.functionaljava.org/) for the most generic ones (callables, predicates, etc).
 
 ## Changelog
 
-### 1.1.0-SNAPSHOT
+### 2.0.0-SNAPSHOT
 
+* Moved to [Functional Java](http://www.functionaljava.org/) from [TotallyLazy](http://totallylazy.com/), 
+  all the library revolved around functional constructs so this is a pretty breaking change.
 * Added predicate `WhereClause#isEmpty()`.
+* Exposed as public API `SqlFilters#bindParamsId()`.
+* Constructors of `WhereClause` and `ParamIndex` is now private, the static factory methods must be used instead.
+* Updated and wrote additional Javadoc comments.
 
 ### 1.0.0
 
@@ -55,15 +59,15 @@ First release with a first formulation of the `Filter` concept and basic mechani
 
 ### Value objects
 
-Conceptually, filtering some *data* can be seen as a predicate function:
+Conceptually, filtering some *data* can be seen as a predicate function on a value of some generic type:
 
 ```haskell
-matches :: a -> Bool
+filter :: a -> Bool
 ```
 
-However, defining filters this way means that every possible predicate from an implementation perspective is a totally different function. For example, if we have a `Person` and we want to filter its values by age, matching if a person age is 19 or 20 has to be done with two different ad-hoc function.
+However, defining filters this way means that every possible predicate from an implementation perspective is a totally different function. For example, if we have a `Person` type and we want to filter those values by age, matching if a person age is 19 or 20 has to be done with two different ad-hoc functions.
 
-Clearly we can do better and use *parametric predicates*, obtaining a predicate by *partial application* (even better with currying):
+Clearly we can do better and use *parametric predicates*, obtaining a predicate by *partial application* (and even better with currying):
 
 ```haskell
 filterByAge :: Int -> Person -> Bool
@@ -73,17 +77,15 @@ filterByAgeRange :: Int -> Int -> Person -> Bool
 
 In a Java context, we can model a filter as a partially applied function:
 
-* Every filter is a statically typed class of objects that implements a `matches` function: it takes a value of a certain type and returns a boolean.
-* A filter can be made parametric by requiring parameters at construction time via its constructor. This way, in some sense we are partially applying a filtering function (to the constructor parameters).
-* When we have a `Filter` instance, we can apply its `matches` method to match values of the required type.
-  
-Actually, (courtesy of TotallyLazy) a `Filter<T>` is a [`Predicate<T>`](https://github.com/bodar/totallylazy/blob/master/src/com/googlecode/totallylazy/Predicate.java) and a [`Callable1<T, Boolean>`](https://github.com/bodar/totallylazy/blob/master/src/com/googlecode/totallylazy/Callable1.java).
-  
+* Every filter is a statically typed class of objects that implements a filter function: it takes a value of a certain type and returns a boolean.
+* A filter can be made parametric by requiring parameters at construction time via its constructor. This way, in some sense we are partially applying a filtering function (using the constructor parameters).
+* When we have a `Filter` instance (which is just a [function](http://www.functionaljava.org/javadoc/4.4/functionaljava/fj/F.html)), we can apply it to match values of the required type. Actually, `Filter<T>` is indeed a `F<T, Boolean>`.
+
 This way, we can write generic and type-safe filtering operations by *composing filters*. Both AND and OR combinators are implemented.
 
 ### JDBC filters
 
-A filter in a JDBC context can be viewed as a couple of related operations:
+A filter in a JDBC context can be viewed as a pair of related operations:
 
 * WHERE clause string generation
 * Parameters binding
@@ -91,7 +93,7 @@ A filter in a JDBC context can be viewed as a couple of related operations:
 *siftj* defined an interface that specifies this contract: `SqlFilter`. Being an interface, there are 
 a couple of considerations to make:
 
-1. Every object can be a `SqlFilter`, even a `Filter` implementation. In the latter case, both POJOs and JDBC
+1. Every object can be a `SqlFilter`, even a `Filter` implementation. In the latter, both POJOs and JDBC
    filtering can be implemented in the same class (this is not to say that it's the right thing to do or the suggested
    way to use this interface).
 2. There is no prescription on how a `SqlFilter` type has to be instantiated: we cannot possibly predict all the use
@@ -120,10 +122,10 @@ public class Person {
 Define some *filters* for this type, by extending the `Filter` base class:
 
 ```java
-public class AgeFilter extends Filter<Person> {
+public class AgeFilter implements Filter<Person> {
   private final int age;
 
-  public AgeFilter(int age) {
+  private AgeFilter(int age) {
     this.age = age;
   }
 
@@ -132,7 +134,7 @@ public class AgeFilter extends Filter<Person> {
   }
 
   @Override
-  public boolean matches(Person p) {
+  public Boolean f(Person p) {
     return p.getAge() == age;
   }
 }
@@ -165,7 +167,7 @@ We can compose filters also with the *OR operator*:
 Filter<Person> compFilter = Filters.or(ageFilter(25), sexFilter(Sex.FEMALE));
 ```
 
-Since these combinators operates on `Filter`s (are function `[Filter] -> Filter`), they can be freely combined:
+Since these combinators operates on `Filter`s (in other words they are functions `[Filter] -> Filter`), they can be freely combined to compose complex filters combinations:
 
 ```java
 Filters.or(Filters.and(ageFilter(25), sexFilter(Sex.FEMALE)),
@@ -196,12 +198,12 @@ public class SqlNameFilter implements SqlFilter {
   public BindParamsF bindParameters() {
     return new BindParamsF() {
       @Override
-      public Pair<ParamIndex, PreparedStatement> call(
-          Pair<ParamIndex, PreparedStatement> p) throws Exception {
-        ParamIndex index = p.first();
-        PreparedStatement statement = p.second();
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
+        ParamIndex index = p._1();
+        PreparedStatement statement = p._2();
         statement.setString(index.get(), name);
-        return pair(index.succ(), statement);
+        return p(index.succ(), statement);
       }
     };
   }
@@ -219,7 +221,7 @@ WhereClause c = f.whereClause();
 And to bind the parameters in a full JDBC query:
 
 ```java
-f.bindParameters().call(Pair.pair(ParamIndex.paramIndex(4), statement));
+f.bindParameters().f(P.p(ParamIndex.paramIndex(4), statement));
 // statement.setString(4, "name");
 ```
 
@@ -240,22 +242,22 @@ public class SqlPotentialFriendFilter implements SqlFilter {
 
   @Override
   public WhereClause whereClause() {
-    return new WhereClause(String.format(
-      "(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
+    return WhereClause.whereClause(String
+        .format("(%s.age BETWEEN ? AND ?) AND %s.sex=?", tableRef, tableRef));
   }
 
   @Override
   public BindParamsF bindParameters() {
     return new BindParamsF() {
       @Override
-      public Pair<ParamIndex, PreparedStatement> call(
-          Pair<ParamIndex, PreparedStatement> p) throws Exception {
-        ParamIndex index = p.first();
-        PreparedStatement statement = p.second();
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
+        ParamIndex index = p._1();
+        PreparedStatement statement = p._2();
         statement.setInt(index.get(), range.getFrom());
         statement.setInt(index.add(1).get(), range.getTo());
         statement.setString(index.add(2).get(), sex.name());
-        return pair(index.add(3), statement);
+        return p(index.add(3), statement);
       }
     };
   }
@@ -274,7 +276,7 @@ A more complex example:
 ```java
 SqlFilter cf = SqlFilters.or(new SqlNameFilter("p", "Jerry"),
                              SqlFilters.and(new SqlNameFilter("p", "Mary"),
-							                new AgeFilter(28)));
+							                ageFilter(28)));
 ```
 
 ## Contribution guidelines

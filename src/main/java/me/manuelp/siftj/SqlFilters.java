@@ -1,9 +1,8 @@
 package me.manuelp.siftj;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.callables.JoinString;
+import fj.F;
+import fj.F2;
+import fj.P2;
 import me.manuelp.siftj.sql.BindParamsF;
 import me.manuelp.siftj.sql.ParamIndex;
 import me.manuelp.siftj.sql.SqlFilter;
@@ -13,12 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static fj.data.List.iterableList;
 
 /**
  * Defines some generic functions on {@link SqlFilter}.
  */
 public class SqlFilters {
+
   /**
    * Compose multiple {@link SqlFilter} in AND.
    *
@@ -40,65 +40,69 @@ public class SqlFilters {
   }
 
   private static BindParamsF composeBindParamsF(List<SqlFilter> sqlFilters) {
-    return sequence(sqlFilters).map(getBindParamsF()).foldLeft(bindParamsId(),
-      composeBindParamsF());
+    return iterableList(sqlFilters).map(getBindParamsF())
+        .foldLeft1(composeBindParamsF());
   }
 
   private static WhereClause composeWhereClauses(List<SqlFilter> sqlFilters,
       String binaryOperator) {
-    String whereClauseString = sequence(sqlFilters).map(getWhereClauseF())
+    String whereClauseString = iterableList(sqlFilters).map(getWhereClauseF())
         .map(toEnclosedString()).intersperse(" " + binaryOperator + " ")
-        .reduce(JoinString.instance);
+        .foldLeft1(new F2<String, String, String>() {
+          @Override
+          public String f(String x, String y) {
+            return x + y;
+          }
+        });
     return WhereClause.whereClause(whereClauseString);
   }
 
-  private static Callable1<SqlFilter, WhereClause> getWhereClauseF() {
-    return new Callable1<SqlFilter, WhereClause>() {
+  private static F<SqlFilter, WhereClause> getWhereClauseF() {
+    return new F<SqlFilter, WhereClause>() {
       @Override
-      public WhereClause call(SqlFilter sqlFilter) throws Exception {
+      public WhereClause f(SqlFilter sqlFilter) {
         return sqlFilter.whereClause();
       }
     };
   }
 
-  private static Callable1<WhereClause, String> toEnclosedString() {
-    return new Callable1<WhereClause, String>() {
+  private static F<WhereClause, String> toEnclosedString() {
+    return new F<WhereClause, String>() {
       @Override
-      public String call(WhereClause whereClause) throws Exception {
+      public String f(WhereClause whereClause) {
         return "(" + whereClause.getClause() + ")";
       }
     };
   }
 
-  private static Callable1<SqlFilter, BindParamsF> getBindParamsF() {
-    return new Callable1<SqlFilter, BindParamsF>() {
+  private static F<SqlFilter, BindParamsF> getBindParamsF() {
+    return new F<SqlFilter, BindParamsF>() {
       @Override
-      public BindParamsF call(SqlFilter sqlFilter) throws Exception {
+      public BindParamsF f(SqlFilter sqlFilter) {
         return sqlFilter.bindParameters();
       }
     };
   }
 
-  private static BindParamsF bindParamsId() {
+  public static BindParamsF bindParamsId() {
     return new BindParamsF() {
       @Override
-      public Pair<ParamIndex, PreparedStatement> call(
-          Pair<ParamIndex, PreparedStatement> p) throws SQLException {
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
         return p;
       }
     };
   }
 
-  private static Callable2<BindParamsF, BindParamsF, BindParamsF> composeBindParamsF() {
-    return new Callable2<BindParamsF, BindParamsF, BindParamsF>() {
+  private static F2<BindParamsF, BindParamsF, BindParamsF> composeBindParamsF() {
+    return new F2<BindParamsF, BindParamsF, BindParamsF>() {
       @Override
-      public BindParamsF call(final BindParamsF a, final BindParamsF b)
-          throws Exception {
+      public BindParamsF f(final BindParamsF a, final BindParamsF b) {
         return new BindParamsF() {
           @Override
-          public Pair<ParamIndex, PreparedStatement> call(
-              Pair<ParamIndex, PreparedStatement> p) throws Exception {
-            return b.call(a.call(p));
+          public P2<ParamIndex, PreparedStatement> f(
+              P2<ParamIndex, PreparedStatement> p) throws SQLException {
+            return b.f(a.f(p));
           }
         };
       }

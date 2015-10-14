@@ -1,13 +1,17 @@
 package me.manuelp.siftj.sql;
 
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Function2;
+import fj.F;
+import fj.F2;
 import me.manuelp.siftj.validations.NotNull;
 
+/**
+ * Represents a WHERE clause, eg. <code>a.field=?</code> or
+ * <code>b IS NOT NULL</code>, etc.
+ */
 public class WhereClause {
   private final String clause;
 
-  public WhereClause(String clause) {
+  private WhereClause(String clause) {
     NotNull.check(clause);
     this.clause = clause;
   }
@@ -20,27 +24,39 @@ public class WhereClause {
     return clause;
   }
 
-  public static Function1<SqlFilter, WhereClause> getClauseF() {
-    return new Function1<SqlFilter, WhereClause>() {
+  public static F<SqlFilter, WhereClause> getClauseF() {
+    return new F<SqlFilter, WhereClause>() {
       @Override
-      public WhereClause call(SqlFilter sqlFilter) {
+      public WhereClause f(SqlFilter sqlFilter) {
         return sqlFilter.whereClause();
       }
     };
   }
 
-  public static Function2<WhereClause, WhereClause, WhereClause> concatF2() {
-    return new Function2<WhereClause, WhereClause, WhereClause>() {
+  /**
+   * Creates a function that concatenates two where clauses with an AND SQL
+   * operator, wrapping the original clauses in parenthesis.
+   * 
+   * @return {@link WhereClause}s concatenation function
+   */
+  public static F2<WhereClause, WhereClause, WhereClause> concatF2() {
+    return new F2<WhereClause, WhereClause, WhereClause>() {
       @Override
-      public WhereClause call(WhereClause c1, WhereClause c2) {
+      public WhereClause f(WhereClause c1, WhereClause c2) {
         return c1.concat(c2);
       }
     };
   }
 
+  /**
+   * Concatenates two where clauses with an AND SQL operator, wrapping the
+   * original clauses in parenthesis.
+   *
+   * @return {@link WhereClause} which is the concatenation
+   */
   public WhereClause concat(WhereClause c) {
-    return whereClause(String.format("(%s) AND (%s)", this.getClause(),
-      c.getClause()));
+    return whereClause(
+      String.format("(%s) AND (%s)", this.getClause(), c.getClause()));
   }
 
   /**

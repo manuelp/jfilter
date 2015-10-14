@@ -1,10 +1,11 @@
 package me.manuelp.siftj.sql;
 
-import com.googlecode.totallylazy.Pair;
+import fj.P2;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import static com.googlecode.totallylazy.Pair.pair;
+import static fj.P.p;
 
 public class SqlNameFilter implements SqlFilter {
   private String tableRef;
@@ -17,19 +18,19 @@ public class SqlNameFilter implements SqlFilter {
 
   @Override
   public WhereClause whereClause() {
-    return new WhereClause(tableRef + "." + name + "=?");
+    return WhereClause.whereClause(tableRef + "." + name + "=?");
   }
 
   @Override
   public BindParamsF bindParameters() {
     return new BindParamsF() {
       @Override
-      public Pair<ParamIndex, PreparedStatement> call(
-          Pair<ParamIndex, PreparedStatement> p) throws Exception {
-        ParamIndex index = p.first();
-        PreparedStatement statement = p.second();
+      public P2<ParamIndex, PreparedStatement> f(
+          P2<ParamIndex, PreparedStatement> p) throws SQLException {
+        ParamIndex index = p._1();
+        PreparedStatement statement = p._2();
         statement.setString(index.get(), name);
-        return pair(index.succ(), statement);
+        return p(index.succ(), statement);
       }
     };
   }
