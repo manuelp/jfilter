@@ -13,7 +13,7 @@ Right now, we have a small number of primitives and functions that rely on [Func
 
 ## Changelog
 
-### 2.0.0-SNAPSHOT
+### 2.0.0
 
 * Moved to [Functional Java](http://www.functionaljava.org/) from [TotallyLazy](http://totallylazy.com/), 
   all the library revolved around functional constructs so this is a pretty breaking change.
