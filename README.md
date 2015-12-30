@@ -13,6 +13,10 @@ Right now, we have a small number of primitives and functions that rely on [Func
 
 ## Changelog
 
+### 2.0.1
+
+* Made combinators in `SqlFilters` parametric on `SqlFilter` implementations.
+
 ### 2.0.0
 
 * Moved to [Functional Java](http://www.functionaljava.org/) from [TotallyLazy](http://totallylazy.com/), 

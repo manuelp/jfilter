@@ -1,18 +1,19 @@
 package me.manuelp.siftj;
 
+import static fj.data.List.iterableList;
+
 import fj.F;
 import fj.F2;
 import fj.P2;
-import me.manuelp.siftj.sql.BindParamsF;
-import me.manuelp.siftj.sql.ParamIndex;
-import me.manuelp.siftj.sql.SqlFilter;
-import me.manuelp.siftj.sql.WhereClause;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import static fj.data.List.iterableList;
+import me.manuelp.siftj.sql.BindParamsF;
+import me.manuelp.siftj.sql.ParamIndex;
+import me.manuelp.siftj.sql.SqlFilter;
+import me.manuelp.siftj.sql.WhereClause;
 
 /**
  * Defines some generic functions on {@link SqlFilter}.
@@ -25,7 +26,7 @@ public class SqlFilters {
    * @param sqlFilters List of {@link SqlFilter} to combine.
    * @return {@link SqlFilter} that combines in AND the given ones.
    */
-  public static SqlFilter and(final List<SqlFilter> sqlFilters) {
+  public static <T extends SqlFilter> SqlFilter and(final List<T> sqlFilters) {
     return new SqlFilter() {
       @Override
       public WhereClause whereClause() {
@@ -39,15 +40,17 @@ public class SqlFilters {
     };
   }
 
-  private static BindParamsF composeBindParamsF(List<SqlFilter> sqlFilters) {
-    return iterableList(sqlFilters).map(getBindParamsF())
+  private static <T extends SqlFilter> BindParamsF composeBindParamsF(
+      List<T> sqlFilters) {
+    return iterableList(sqlFilters).map(SqlFilters.<T> getBindParamsF())
         .foldLeft1(composeBindParamsF());
   }
 
-  private static WhereClause composeWhereClauses(List<SqlFilter> sqlFilters,
-      String binaryOperator) {
-    String whereClauseString = iterableList(sqlFilters).map(getWhereClauseF())
-        .map(toEnclosedString()).intersperse(" " + binaryOperator + " ")
+  private static <T extends SqlFilter> WhereClause composeWhereClauses(
+      List<T> sqlFilters, String binaryOperator) {
+    String whereClauseString = iterableList(sqlFilters)
+        .map(SqlFilters.<T> getWhereClauseF()).map(toEnclosedString())
+        .intersperse(" " + binaryOperator + " ")
         .foldLeft1(new F2<String, String, String>() {
           @Override
           public String f(String x, String y) {
@@ -57,10 +60,10 @@ public class SqlFilters {
     return WhereClause.whereClause(whereClauseString);
   }
 
-  private static F<SqlFilter, WhereClause> getWhereClauseF() {
-    return new F<SqlFilter, WhereClause>() {
+  private static <T extends SqlFilter> F<T, WhereClause> getWhereClauseF() {
+    return new F<T, WhereClause>() {
       @Override
-      public WhereClause f(SqlFilter sqlFilter) {
+      public WhereClause f(T sqlFilter) {
         return sqlFilter.whereClause();
       }
     };
@@ -75,10 +78,10 @@ public class SqlFilters {
     };
   }
 
-  private static F<SqlFilter, BindParamsF> getBindParamsF() {
-    return new F<SqlFilter, BindParamsF>() {
+  private static <T extends SqlFilter> F<T, BindParamsF> getBindParamsF() {
+    return new F<T, BindParamsF>() {
       @Override
-      public BindParamsF f(SqlFilter sqlFilter) {
+      public BindParamsF f(T sqlFilter) {
         return sqlFilter.bindParameters();
       }
     };
@@ -115,7 +118,7 @@ public class SqlFilters {
    * @param sqlFilters List of {@link SqlFilter} to combine.
    * @return {@link SqlFilter} that combines in OR the given ones.
    */
-  public static SqlFilter or(final List<SqlFilter> sqlFilters) {
+  public static <T extends SqlFilter> SqlFilter or(final List<T> sqlFilters) {
     return new SqlFilter() {
       @Override
       public WhereClause whereClause() {
