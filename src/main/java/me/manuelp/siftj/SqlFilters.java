@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import me.manuelp.siftj.sql.BindParamsF;
+import me.manuelp.siftj.sql.IdentitySqlFilter;
 import me.manuelp.siftj.sql.ParamIndex;
 import me.manuelp.siftj.sql.SqlFilter;
 import me.manuelp.siftj.sql.WhereClause;
@@ -27,6 +28,11 @@ public class SqlFilters {
    * @return {@link SqlFilter} that combines in AND the given ones.
    */
   public static <T extends SqlFilter> SqlFilter and(final List<T> sqlFilters) {
+    if(sqlFilters.isEmpty())
+      return new IdentitySqlFilter();
+    else if (sqlFilters.size() == 1)
+      return sqlFilters.get(0);
+
     return new SqlFilter() {
       @Override
       public WhereClause whereClause() {
@@ -119,6 +125,11 @@ public class SqlFilters {
    * @return {@link SqlFilter} that combines in OR the given ones.
    */
   public static <T extends SqlFilter> SqlFilter or(final List<T> sqlFilters) {
+    if(sqlFilters.isEmpty())
+      return new IdentitySqlFilter();
+    else if (sqlFilters.size() == 1)
+      return sqlFilters.get(0);
+
     return new SqlFilter() {
       @Override
       public WhereClause whereClause() {
