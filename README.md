@@ -15,8 +15,11 @@ Right now, we have a small number of primitives and functions that rely on [Func
 
 ### 2.0.2-SNAPSHOT
 
+#### Fixes
 * Added identity `SqlFilter`: `IdentitySqlFilter`.
 * Fixed `SqlFilters` combinators (and, or) to work with both empty and one element input filters lists.
+* Added constat value `Filter`: `NonFilter`.
+* Fixed `Filters` combinators (and, or) to work with both empty and one element input filters lists.
 
 ### 2.0.1
 

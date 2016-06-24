@@ -1,24 +1,21 @@
 package me.manuelp.siftj;
 
-import fj.F2;
-
-import java.util.List;
-
 import static fj.data.List.iterableList;
+
+import fj.F2;
+import java.util.List;
 
 /**
  * Defines some generic filtering functions on {@link Filter}s.
  */
 public class Filters {
   /**
-   * Generic type-safe filtering higher-order function to apply a single
-   * {@link Filter} to a list of values.
+   * Generic type-safe filtering higher-order function to apply a single {@link Filter} to a list of values.
    *
    * @param filter {@link Filter} to apply to every single value
    * @param values List of values
    * @param <T> Type of values to be filtered
-   * @return Filtered list of the original values that satisfies the given
-   *         filter predicate
+   * @return Filtered list of the original values that satisfies the given filter predicate
    */
   public static <T> List<T> filter(Filter<T> filter, List<T> values) {
     return iterableList(values).filter(filter).toJavaList();
@@ -55,8 +52,7 @@ public class Filters {
     return new Filter<T>() {
       @Override
       public Boolean f(T t) {
-        return iterableList(filters).foldLeft1(Filters.<T> andCombinator())
-            .f(t);
+        return iterableList(filters).foldLeft(Filters.<T> andCombinator(), NonFilter.<T> nonFilter(true)).f(t);
       }
     };
   }
@@ -89,20 +85,21 @@ public class Filters {
    * @return Filter obtained by composing in OR all input filters
    */
   public static <T> Filter<T> or(final List<Filter<T>> filters) {
+    if (filters.isEmpty())
+      return NonFilter.<T> nonFilter(true);
+
     return new Filter<T>() {
       @Override
       public Boolean f(T t) {
-        return iterableList(filters).foldLeft1(Filters.<T> orCombinator()).f(t);
+        return iterableList(filters).foldLeft(Filters.<T> orCombinator(), NonFilter.<T> nonFilter(false)).f(t);
       }
     };
   }
 
   /**
-   * Generic type-safe filtering functions to apply a list of {@link Filter
-   * filters} in AND to a list of values.
+   * Generic type-safe filtering functions to apply a list of {@link Filter filters} in AND to a list of values.
    *
-   * @param filters List of {@link Filter filters} combined with
-   *          {@link #andCombinator()} to apply to every value
+   * @param filters List of {@link Filter filters} combined with {@link #andCombinator()} to apply to every value
    * @param values List of values
    * @param <T> Type of the values to filter
    * @return List of values that satisfy <em>all</em> given filter predicates
