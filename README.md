@@ -13,7 +13,7 @@ Right now, we have a small number of primitives and functions that rely on [Func
 
 ## Changelog
 
-### 2.0.2-SNAPSHOT
+### 2.0.2
 
 #### Fixes
 * Added identity `SqlFilter`: `IdentitySqlFilter`.
