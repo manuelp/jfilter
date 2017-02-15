@@ -142,4 +142,23 @@ public class SqlFilters {
       }
     };
   }
+
+  /**
+   * Negate any {@link SqlFilter}.
+   *
+   * @param f {@link SqlFilter} to negate
+   * @return Negated {@link SqlFilter}
+   */
+  public static <T extends SqlFilter> SqlFilter not(final T f) {
+    return new SqlFilter() {
+      @Override
+      public WhereClause whereClause() {
+        return WhereClause.whereClause("NOT (" + f.whereClause().getClause() + ")");
+      }
+      @Override
+      public BindParamsF bindParameters() {
+        return f.bindParameters();
+      }
+    };
+  }
 }

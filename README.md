@@ -13,6 +13,10 @@ Right now, we have a small number of primitives and functions that rely on [Func
 
 ## Changelog
 
+### 2.1.0
+#### Added
+* New `SqlFilters#not()` combinator.
+
 ### 2.0.2
 
 #### Fixes

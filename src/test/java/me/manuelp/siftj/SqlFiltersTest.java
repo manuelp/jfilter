@@ -137,4 +137,14 @@ public class SqlFiltersTest {
 
     assertEquals(f, composed);
   }
+
+  @Test
+  public void foo() {
+    SqlNameFilter f1 = new SqlNameFilter("p", "Frank");
+
+    WhereClause clause = SqlFilters.not(f1).whereClause();
+
+    assertEquals(String.format("NOT (%s)", f1.whereClause().getClause()),
+        clause.getClause());
+  }
 }
